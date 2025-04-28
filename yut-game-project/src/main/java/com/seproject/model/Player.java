@@ -1,0 +1,16 @@
+public class Player {
+    public players(String nickname){
+        //닉네임을 이용해 플레이어 클래스를 생성한다. 팀 번호는 더 이상 의미가 없으므로 인자로 받지 않는다.
+    };
+
+    private String name; //인터페이스로 입력 받은 이름이다. 닉네임도 상관없다.
+    private int playerId; //유저 아이디이다. 유저를 판별할 때 사용한다.
+    
+    public String getName(){
+        //이름을 반환한다.
+    };  
+
+    public int getId(){
+        //자신의 유저 아이디를 반환한다.
+    }; 
+}
