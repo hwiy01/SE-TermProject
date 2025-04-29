@@ -18,7 +18,7 @@ public class App
 
 
         // 2. 
-        // Board 객체 생성
+        // Board 객체 생성 - 이때 numberOfShpae 넘겨줌
         // GameManager 객체 생성하여 Board와 위의 옵션들 넘겨줌
         System.out.println( "Hello World!" );
     }

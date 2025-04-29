@@ -7,44 +7,45 @@ import com.seproject.view.GameSetupUI;
 
 public class GameManager {
     public void PlayGame(){
-        // 3. GamePlayUI, Dice, Piece 객체 생성
     
-        // 4. 게임 플레이 로직
-        // checkwinCondition이 0일때 아래 내용들 반복
+        // 게임 플레이 로직
 
-            // 4-1. 
+            // 1. 
             // rollDice 호출
             // UI) GamePlayUI의 showDiceResult 호출
 
-            // 4-2. 
+            // 2. 
             // UI) selectDiceChoice 호출
             // 랜덤 / 지정 윷던지기 중 선택하도록
 
-                // 4-2-1. 랜덤 윷던지기 경우
-                // rollDice 호출 (파라미터 0으로) <- 여기서 호출되는 거 맞나요?? 그리고 onebyone은 뭔가요
+                // 2-1. 랜덤 윷던지기 경우
+                // rollDice 호출 () 
+                // currentDiceResult에 값 저장
 
-                // 4-2-2. 지정 윷던지기 경우
+                // 2-2. 지정 윷던지기 경우
                 // UI) selectDiceResult 호출
-                // rollDice 호출(파라미터 selectDiceResult 의 반환값을 넣어서)
-                
+                // currentDiceResult[]에 값 저장
 
-            // 4-3. 
+
+            // 3. 
             // UI) showDiceResult 호출 윷던지기 결과 보여줌
 
 
             // 윷을 던지고, 말을 움직이는 로직
-            // 4-4. processMove 함수 호출
+            // 4. processMove 함수 호출
             // 
 
-            // 4-5. isCaptureOrGroup 함수 호출  // UI) showWhichResultToUse가 이 함수 내에서  호출되는 건가요???
+            // 5. isCaptureOrGroup 함수 호출  
             // 
 
-
-            // 4-6. scoreUp 함수 호출
+            // 6. scoreUp 함수 호출
             // UI) updateScore()  
+
+            // 7. 이겼는지 확인
+            // checkwinCondition 호출, true 일때 종료 프로세스 실행
             
 
-            // 4-7. nextTurn 함수 호출
+            // 8. nextTurn 함수 호출
             // UI) showCurrentTurn
         
 
@@ -52,7 +53,7 @@ public class GameManager {
 
     public void GameManager(Player[] currentPlayers, int numberOfPiecesForEachTeam, Board gameBoard) {
         //생성자이다. GameSetupUI에서 받아온 정보를 토대로 게임 매니저 내부의 players에 입력 받은 어레이를 복사하고, 팀 개수와 각 팀에서 사용할 게임 말의 개수를 내부 변수에 채워 넣는다. 
-        //또한 piece를 생성한다. 그리고 쓸 게임 판을 내부 변수에 채워 넣는다.
+        // GamePlayUI, Dice, Piece 객체 생성
     };
 
     private int numberOfPiecesForEachPlayer;  //각 “플레이어”당 말 개수를 의미한다.
@@ -65,6 +66,8 @@ public class GameManager {
     private GamePlayUI gamePlayUI; // 조작할 UI
     private Dice[] dice;  //윷이다. // 길이 4 배열로 초기화
     private Piece[] gamePieces; //게임말들이다
+
+    private DiceResult[] currentDiceResult;
 
 
     private int currentTurn;
@@ -97,13 +100,14 @@ public class GameManager {
         //그리고 isCapturedOrGrouped 기능이 넘 커지는 것 같아서 이 함수는 겹치는지 비교만하고, 잡거나 그룹화 하는 코드는 분리해서 함수로 만드는 거 어때요? -> iscapturedOrGrouped는 그냥 위치에 있는 말 조회해서 겹치는게 있나 있다면 상대편거가 섞여있나 섞여있다고? 너 시작위치로! 아니라고? 그냥 grouped1로 바꾸고 리턴 
     };
 
-    public void checkWinCondition(){
+    public boolean checkWinCondition(){
         //매 턴이 끝날 때마다 호출된다. 만일 한 팀의 모든 말이 필드에 존재하지 않을 경우(모든 말의 위치가 -1), 게임은 끝나고, 그 팀(개인전이므로 해당 플레이어가 된다)이 승리한다. 어느 팀(개인전이므로 해당 플레이어가 된다)도 그 조건을 만족시키지 못할 경우 게임은 계속된다.
     };
 
 
-    public DiceResult[] rollDice(boolean oneByOne, int selectedYut){
-        //윷을 던진다. 인자로 1을 받을 시 하나씩 던지고, 0을 받을 시 한번에 던진다. 랜덤 함수를 이용한다. 도개걸윷모 각각 01234이고, 이 숫자를 반환한다. 만일 반환값이 3혹은 4일 시 한번 더 던지고, 윷이나 모가 나오기 전까지 이 과정을 반복한다. 각각의 결과값을 어레이에 넣어 반환한다. 랜덤 윷 던지기 / 지정 윷던지기로 나뉘는 것을 반영해서 파라미터에 selectedYut 추가해서 0일때 랜덤으로 돌려서 반환하고, 1~5일때 각각 도~모를 반환한다.
+    public DiceResult rollDice(){
+        //roll.Dice를 호출하여 랜덤 DiceResult 값 받아옴
+        //Dice.rollDice는 ‘랜덤으로 던지기’ 기능을 수행하는 함수로, DiceResult를 정해진 비율에 따라 반환
     };
 
 }
