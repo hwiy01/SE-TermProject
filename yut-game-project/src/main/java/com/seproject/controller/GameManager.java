@@ -1,3 +1,5 @@
+package com.seproject.controller;
+
 import com.seproject.enums.DiceResult;
 import com.seproject.model.Board;
 import com.seproject.model.Dice;
@@ -54,6 +56,9 @@ public class GameManager {
     public void GameManager(Player[] currentPlayers, int numberOfPiecesForEachTeam, Board gameBoard) {
         //생성자이다. GameSetupUI에서 받아온 정보를 토대로 게임 매니저 내부의 players에 입력 받은 어레이를 복사하고, 팀 개수와 각 팀에서 사용할 게임 말의 개수를 내부 변수에 채워 넣는다. 
         // GamePlayUI, Dice, Piece 객체 생성
+//        for (int i = 0; i < 4; i++) {
+//            dice[i] = new Dice(); // 각 윷을 따로 초기화
+//        }
     };
 
     private int numberOfPiecesForEachPlayer;  //각 “플레이어”당 말 개수를 의미한다.
@@ -65,10 +70,11 @@ public class GameManager {
     // private GameSetupUI gameSetupUI; // 게임 설정에 대한 정보 받아오면 더 필요없으니 제거하는 것으로 수정
     private GamePlayUI gamePlayUI; // 조작할 UI
     private Dice[] dice;  //윷이다. // 길이 4 배열로 초기화
+
+    private DiceResult currentDiceResult;
+
     private Piece[] gamePieces; //게임말들이다
-
-    private DiceResult[] currentDiceResult;
-
+    //private DiceResult[] currentDiceResult;
 
     private int currentTurn;
     //현재 누구의 턴인지 보여준다. 윷놀이는 참가자들이 한명씩 번갈아가면서 윷을 던지므로 범위는 0 ~ length(players) – 1이다. 그런 식으로 진행한다면 현재 윷을 던질 사람은 players[currentTurn]이 된다. 이렇게 게임 흐름에 따라 유연하게 계산하기 위한 내부 변수이다.
@@ -86,7 +92,7 @@ public class GameManager {
         예를 들면 도인 상황이라면 해당 위치의 말들이 possibleDoMove 해당 int 어레이의 내부 값으로 이동한다.
         그 후 iscaptureOrGroup을 호출하기 전, 골인했는지를 반드시 먼저 확인해야 한다. 그렇지 않으면 골인 지점이자 시작 지점인 위치에서 iscaptureOrGroup이 실행되어 게임 흐름이 뒤죽박죽이 될 수 도 있다. 만일 골인했다면, scoreup을 실행한 뒤, 함수를 종료한다.(return)
         processMove함수의 마지막 처리로 iscaptureOrGroup을 호출한다. 그렇게 하면 이론상 시작 위치를 제외한 다른 위치에서 다른 팀의 말끼리의 공존을 막을 수 있다.  */
-    }; 
+    };
 
     public void scoreUp(int pieceId){
         //pieceId에 해당하는 게임 말을 조회하고, 그 말의 수만큼 그 팀(개인전이므로 해당 플레이어가 된다)의 스코어를 올린다. 이후 그 말(들)은 위치 정보를 -1로 표기한다. (승리조건과 디버깅을 위해, 그리고 이러한 값 설정은 추적에도 용이하다.)
@@ -108,6 +114,29 @@ public class GameManager {
     public DiceResult rollDice(){
         //roll.Dice를 호출하여 랜덤 DiceResult 값 받아옴
         //Dice.rollDice는 ‘랜덤으로 던지기’ 기능을 수행하는 함수로, DiceResult를 정해진 비율에 따라 반환
-    };
+
+        int[] result = new int[4]; // 각 윷의 결과를 저장하는 배열
+        int count = 0; // 납작한 면이 나온 개수를 count
+        for (int i = 0; i < 4; i++) {
+            result[i] = dice[i].roll(); // 윷 4개 각각 던지기
+            count += result[i];
+        }
+
+        // 납작한 면이 1개만 나왔고, 납작한 면이 나온 윷이 첫번째 윷일 경우를 빽도로 판정함.
+        if (count == 1 && result[0] == 1 && result[1] == 0 && result[2] == 0 && result[3] == 0) {
+            currentDiceResult = DiceResult.BACKDO;
+        } else {
+            switch (count) {
+                case 0: currentDiceResult = DiceResult.MO; break;
+                case 1: currentDiceResult = DiceResult.DO; break;
+                case 2: currentDiceResult = DiceResult.GAE; break;
+                case 3: currentDiceResult = DiceResult.GEOL; break;
+                case 4: currentDiceResult = DiceResult.YUT; break;
+                default: throw new IllegalStateException("Unexpected dice count: " + count);
+            }
+        }
+
+        return currentDiceResult;
+    }
 
 }
