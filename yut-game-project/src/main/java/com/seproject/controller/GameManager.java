@@ -8,7 +8,7 @@ import com.seproject.model.Player;
 import com.seproject.view.GameSetupUI;
 
 public class GameManager {
-    public void PlayGame(){
+    public void playGame(){
     
         // 게임 플레이 로직
 
@@ -56,9 +56,24 @@ public class GameManager {
     public void GameManager(Player[] currentPlayers, int numberOfPiecesForEachTeam, Board gameBoard) {
         //생성자이다. GameSetupUI에서 받아온 정보를 토대로 게임 매니저 내부의 players에 입력 받은 어레이를 복사하고, 팀 개수와 각 팀에서 사용할 게임 말의 개수를 내부 변수에 채워 넣는다. 
         // GamePlayUI, Dice, Piece 객체 생성
-//        for (int i = 0; i < 4; i++) {
-//            dice[i] = new Dice(); // 각 윷을 따로 초기화
-//        }
+        this.players = currentPlayers;
+        this.numberOfPlayers = currentPlayers.length;
+        this.numberOfPiecesForEachPlayer = numberOfPiecesForEachTeam;
+        this.board = gameBoard;
+        this.currentTurn = 0;
+        this.oneMoreChance = false;
+
+        this.dice = new Dice[4];
+        for (int i = 0; i < 4; i++) {
+            dice[i] = new Dice();
+        }
+
+        gamePieces = new Piece[numberOfPlayers][numberOfPiecesForEachPlayer];
+        for (int i = 0; i < numberOfPlayers; i++) {
+            for (int j = 0; j < numberOfPiecesForEachPlayer; j++) {
+                gamePieces[i][j] = new Piece(j, i); // pieceId, playerId
+            }
+        }
     };
 
     private int numberOfPiecesForEachPlayer;  //각 “플레이어”당 말 개수를 의미한다.
@@ -71,10 +86,12 @@ public class GameManager {
     private GamePlayUI gamePlayUI; // 조작할 UI
     private Dice[] dice;  //윷이다. // 길이 4 배열로 초기화
 
+    //private DiceResult[] currentDiceResult;
     private DiceResult currentDiceResult;
 
-    private Piece[] gamePieces; //게임말들이다
-    //private DiceResult[] currentDiceResult;
+    private Piece[][] gamePieces;
+    //private Piece[] gamePieces; //게임말들이다
+
 
     private int currentTurn;
     //현재 누구의 턴인지 보여준다. 윷놀이는 참가자들이 한명씩 번갈아가면서 윷을 던지므로 범위는 0 ~ length(players) – 1이다. 그런 식으로 진행한다면 현재 윷을 던질 사람은 players[currentTurn]이 된다. 이렇게 게임 흐름에 따라 유연하게 계산하기 위한 내부 변수이다.
@@ -82,7 +99,14 @@ public class GameManager {
     private boolean oneMoreChance;
     //잡았을 시 set된다. 잡고 한 턴 더 하는 것을 위한 상태 플래그를 구현한 부분이다.
     public void nextTurn(){
-        //currentTurn에 계속 1을 더해서 턴을 진행시킨다. 만일 oneMoreChance가 1일시 해당 bool값을 0으로 바꾸고 currentTurn값은 바뀌지 않는다. (currentTurn + 1) % (player – 1)을 currentTurn에 넣고 return한다. 1을 빼는 이유는 인덱싱으로 일괄처리하도록 정했기 때문이다. 다른 계산에서도 혹시 관련 연산을 수행해야 한다면 인덱싱으로 처리하는 것을 우선하기 바란다.
+        //currentTurn에 계속 1을 더해서 턴을 진행시킨다. 만일 oneMoreChance가 1일시 해당 bool값을 0으로 바꾸고 currentTurn값은 바뀌지 않는다.
+        // (currentTurn + 1) % (player – 1)을 currentTurn에 넣고 return한다. 1을 빼는 이유는 인덱싱으로 일괄처리하도록 정했기 때문이다.
+        // 다른 계산에서도 혹시 관련 연산을 수행해야 한다면 인덱싱으로 처리하는 것을 우선하기 바란다.
+        if (oneMoreChance) {
+            oneMoreChance = false;
+            return; // 한 번 더 기회가 있었던 경우, 턴 유지
+        }
+        currentTurn = (currentTurn + 1) % numberOfPlayers;
     };
     
     public int processMove(int srcPathNodeId, int length) {
@@ -95,19 +119,39 @@ public class GameManager {
     };
 
     public void scoreUp(int pieceId){
-        //pieceId에 해당하는 게임 말을 조회하고, 그 말의 수만큼 그 팀(개인전이므로 해당 플레이어가 된다)의 스코어를 올린다. 이후 그 말(들)은 위치 정보를 -1로 표기한다. (승리조건과 디버깅을 위해, 그리고 이러한 값 설정은 추적에도 용이하다.)
+        //pieceId에 해당하는 게임 말을 조회하고, 그 말의 수만큼 그 팀(개인전이므로 해당 플레이어가 된다)의 스코어를 올린다.
+        // 이후 그 말(들)은 위치 정보를 -1로 표기한다. (승리조건과 디버깅을 위해, 그리고 이러한 값 설정은 추적에도 용이하다.)
     };
 
     public void isCaptureOrGroup(int srcNodeId){
         //겹쳤는가? 겹쳤다면 잡는가? 그게 아니라면 업는가?에 관한 함수이다. 인자로 시작 위치를 받았을 경우에는 반드시 아무 연산도 하지 않고 return한다. 게임 시작 시 시작 위치에 겹쳐 있기 때문이다.
-        //인자로 받은 위치를 조회하고, 그 위치에 존재하는 모든 말을 추적하여 만일 겹치는 말이 있다면 잡을지 업을지 결정한다. 방금 윷을 던진 팀을 추적하고, 해당 위치에 있는 다른 말이 상태 편 말이라면 상대편 말(들)의 위치를 0으로 바꾸고 oneMoreChance를 1로 바꾸고 return한다. 이는 상대편 말이 잡혀서 시작 위치로 돌아간 것과 잡으면 한번 더 하는 것을 구현한 것이다. 그게 아군의 말이라면 그 위치에 있는 모든 아군의 말들에 관한 업기 연산을 수행한다. 그 후return한다. (업기)’
+        //인자로 받은 위치를 조회하고, 그 위치에 존재하는 모든 말을 추적하여 만일 겹치는 말이 있다면 잡을지 업을지 결정한다.
+        // 방금 윷을 던진 팀을 추적하고, 해당 위치에 있는 다른 말이 상태 편 말이라면 상대편 말(들)의 위치를 0으로 바꾸고 oneMoreChance를 1로 바꾸고 return한다.
+        // 이는 상대편 말이 잡혀서 시작 위치로 돌아간 것과 잡으면 한번 더 하는 것을 구현한 것이다.
+        // 그게 아군의 말이라면 그 위치에 있는 모든 아군의 말들에 관한 업기 연산을 수행한다. 그 후return한다. (업기)’
 
 
         //그리고 isCapturedOrGrouped 기능이 넘 커지는 것 같아서 이 함수는 겹치는지 비교만하고, 잡거나 그룹화 하는 코드는 분리해서 함수로 만드는 거 어때요? -> iscapturedOrGrouped는 그냥 위치에 있는 말 조회해서 겹치는게 있나 있다면 상대편거가 섞여있나 섞여있다고? 너 시작위치로! 아니라고? 그냥 grouped1로 바꾸고 리턴 
     };
 
     public boolean checkWinCondition(){
-        //매 턴이 끝날 때마다 호출된다. 만일 한 팀의 모든 말이 필드에 존재하지 않을 경우(모든 말의 위치가 -1), 게임은 끝나고, 그 팀(개인전이므로 해당 플레이어가 된다)이 승리한다. 어느 팀(개인전이므로 해당 플레이어가 된다)도 그 조건을 만족시키지 못할 경우 게임은 계속된다.
+        // 매 턴이 끝날 때마다 호출된다.
+        // 만일 한 팀의 모든 말이 필드에 존재하지 않을 경우(모든 말의 위치가 -1), 게임은 끝나고,
+        // 그 팀(개인전이므로 해당 플레이어가 된다)이 승리한다. 어느 팀(개인전이므로 해당 플레이어가 된다)도 그 조건을 만족시키지 못할 경우 게임은 계속된다.
+        for (int i = 0; i < numberOfPlayers; i++) {
+            boolean allOut = true;
+            for (int j = 0; j < numberOfPiecesForEachPlayer; j++) {
+                if (gamePieces[i][j].getCurrentPathNodeId() != -1) {
+                    allOut = false;
+                    break;
+                }
+            }
+            if (allOut) {
+                System.out.println("Player " + players[i].getName() + "win!");
+                return true;
+            }
+        }
+        return false;
     };
 
 
