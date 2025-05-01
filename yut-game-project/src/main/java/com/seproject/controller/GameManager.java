@@ -11,8 +11,7 @@ public class GameManager {
         // 게임 플레이 로직
 
             // 1. 
-            // rollDice 호출
-            // UI) GamePlayUI의 showDiceResult 호출
+            // rollDice 호출. 이 결과는 플레이어에게 보여주지 않는다.
 
             // 2. 
             // UI) selectDiceChoice 호출
@@ -105,8 +104,8 @@ public class GameManager {
     };
 
 
-    public DiceResult rollDice(){
-        //roll.Dice를 호출하여 랜덤 DiceResult 값 받아옴
+    public DiceResult[] rollDice(){ //4개의 윷을 모두 던져서 값을 반환한다.
+        //roll.Dice를 모든 윷에 관해서 호출하여 랜덤 DiceResult 값 받아옴
         //Dice.rollDice는 ‘랜덤으로 던지기’ 기능을 수행하는 함수로, DiceResult를 정해진 비율에 따라 반환
     };
 
