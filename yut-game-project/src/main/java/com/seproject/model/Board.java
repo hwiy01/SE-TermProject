@@ -11,6 +11,26 @@ public class Board {
         // 4각형 -> PathNode 29자리 배열
         // 5각형 -> PathNode 33자리 배열
         // 6각형 -> PathNode 43자리 배열
+        switch(numberOfShape){
+            case 4: {
+                pathNodes=new PathNode[30]; //가운데 중복 인덱스로 30자리 배열로 선언하였음
+                for(int i=0; i<29; i++){
+                    pathNodes[i]=new PathNode(i, 4);
+                }
+            } break;
+            case 5: {
+                pathNodes=new PathNode[33];
+                for(int i=0; i<33; i++){
+                    pathNodes[i]=new PathNode(i, 5);
+                }
+            } break;
+            case 6: {
+                pathNodes=new PathNode[43];
+                for(int i=0; i<43; i++){
+                    pathNodes[i]=new PathNode(i, 6);
+                }
+            } break;
+        }
     };
 
     public PathNode[] getPathNodes() {

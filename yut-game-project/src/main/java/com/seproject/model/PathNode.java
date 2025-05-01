@@ -1,6 +1,59 @@
 public class PathNode {
     public PathNode(int pathNodeId, int BoardType){
         //생성자이다. 로케이션 아이디와 게임판 형식을 인자로 받고 그 아이디에 대응하는 정보를 함수가 입력한다. 말을 움직일 때 이는 switch문으로 하나하나 처리되어야 한다. 아래는 게임판 타입 정수 변수가 4일때의 참고용 그림이다.
+        switch(BoardType){
+            case 4:{
+                if(pathNodeId==5 || pathNodeId==10){
+                    inBranch=1;
+                }
+                else{
+                    inBranch=0;
+                }
+                if(inBranch==1){
+                    possibleDoMove=pathNodeId+15;
+                    possibleGaeMove=pathNodeId+16;
+                    possibleGurlMove=pathNodeId+17; //22번과 27번은 같은 pathNode임
+                    possibleYutMove=pathNodeId+18;
+                    possibleMoMove=pathNodeId+19;
+                    possibleBackDoMove=pathNodeId-1;
+                }
+                else if(pathNodeId==22){
+                    possibleDoMove=28;
+                    possibleGaeMove=29;
+                    possibleGurlMove=0; //0은 출발지점이자 도착지점 위에 위치함 여기서 +1칸 가면 골인임
+                    possibleYutMove=30; //30 이상은 골인했음을 의미함
+                    possibleMoMove=31;
+                    possibleBackDoMove=21;
+                }
+                else if(pathNodeId>19 && pathNodeId<25){ //지름길을 통해서 마지막 일반 길(15 ~ 19 노드)로 복귀했을 경우의 수식임
+                    possibleDoMove=((pathNodeId+1)/25)*15+((pathNodeId+1)%25);
+                    possibleGaeMove=((pathNodeId+2)/25)*15+((pathNodeId+2)%25);
+                    possibleGurlMove=((pathNodeId+3)/25)*15+((pathNodeId+3)%25);
+                    possibleYutMove=((pathNodeId+4)/25)*15+((pathNodeId+4)%25);
+                    possibleMoMove=((pathNodeId+5)/25)*15+((pathNodeId+5)%25);
+                    if(pathNodeId==20){ //20번 노드에서 빽도가 나와 다시 분기점으로 돌아가는 경우
+                        possibleBackDoMove=5;
+                    }
+                    else {
+                        possibleBackDoMove = pathNodeId - 1;
+                    }
+                }
+                else{ //일반적인 경우 단순히 윷 결과만큼 더해서 이동
+                    possibleDoMove=pathNodeId+1;
+                    possibleGaeMove=pathNodeId+2;
+                    possibleGurlMove=pathNodeId+3;
+                    possibleYutMove=pathNodeId+4;
+                    possibleDoMove=pathNodeId+5;
+                    possibleBackDoMove=pathNodeId-1;
+                }
+            } break;
+            case 5:{
+                //5각형의 경우
+            } break;
+            case 6:{
+                //6각형의 경우
+            }break;
+        }
     };
 
     //빨간 화살표와 빨간 원 설명과 무관하니 무시하자.
@@ -11,15 +64,19 @@ public class PathNode {
     private int[] possibleGurlMove;
     private int[] possibleYutMove;
     private int[] possibleMoMove;
+    private int[] possibleBackDoMove;
 
     public int[] getPossibleDoMove;
     public int[] getPossibleGaeMove;
     public int[] getPossibleGurlMove;
     public int[] getPossibleYutMove;
     public int[] getPossibleMoMove;
+    public int[] getPossibleBackDoMove;
 
     private int inBranch;   //분기점(갈림길)인지 아닌지를 저장한다. 디폴트값은 0
 
-    public int getInBranch() {};
+    public int getInBranch() {
+        return inBranch;
+    };
 
 };
