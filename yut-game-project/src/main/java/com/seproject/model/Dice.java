@@ -2,6 +2,8 @@
 import com.seproject.enums.DiceResult;
 
 public class Dice {
-    public DiceResult roll() {}; // enum 사용
-    //하나의 윷을 던진다. 앞, 뒤만 반환한다. 둥근 면이 0, 납작한 면이 1이다. (실제 모양을 고려해 직관적으로 설계했다.)
+   public DiceResult rollDice() { //enum을 사용하도록 수정하였다
+    int randomValue = (int) (Math.random() * 5);  // 0~4 랜덤값
+    return DiceResult.values()[randomValue];      // 랜덤하게 DO~MO 중 하나 반환
+}
 }
