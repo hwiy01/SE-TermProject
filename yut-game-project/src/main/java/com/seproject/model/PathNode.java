@@ -17,7 +17,7 @@ public class PathNode {
                     possibleMoMove=pathNodeId+19;
                     possibleBackDoMove=pathNodeId-1;
                 }
-                else if(pathNodeId==22){
+                else if(pathNodeId==22){ //22번 노드에 위치한 경우 27번으로 간주하고 도착지점을 향한 길로 이동
                     possibleDoMove=28;
                     possibleGaeMove=29;
                     possibleGurlMove=0; //0은 출발지점이자 도착지점 위에 위치함 여기서 +1칸 가면 골인임
