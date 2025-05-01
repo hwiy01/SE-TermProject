@@ -21,4 +21,7 @@ public class GamePlayUI {
     public Piece showWhichPieceToMove(){
         //게임 중에 무슨 말을 움직일 건지 입력받는다. 실제로 가능한가는 gameManager안에서만 확인할 수 있다.
     };
+    public boolean selectDiceChoice(){
+        //윷을 일괄적으로 던질지 하나씩 던질지 유저에게 선택받는 함수이다. True는 하나씩 던지는 것, false는 일괄적으로 던지는 것을 의미한다.
+    };
 }
