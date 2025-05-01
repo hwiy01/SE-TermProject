@@ -11,19 +11,18 @@ public class GameManager {
         // 게임 플레이 로직
 
             // 1. 
-            // rollDice 호출. 이 결과는 플레이어에게 보여주지 않는다.
+            // rollDice 호출하여 currentDiceResult에 저장한다. 이 결과는 플레이어에게 보여주지 않는다.
 
             // 2. 
             // UI) selectDiceChoice 호출
-            // 랜덤 / 지정 윷던지기 중 선택하도록
-
-                // 2-1. 랜덤 윷던지기 경우
-                // rollDice 호출 () 
-                // currentDiceResult에 값 저장
+            // 랜덤 / 지정 윷던지기 중 선택하도록 한다. true는 하나씩 던지는 것이고, false는 일괄적으로 던지는 것이다.
+            //반환값을 아래 두 상황으로 분기한다.
+        
+                // 2-1. 랜덤 윷던지기 경우(일괄) 
+                // currentDiceResult에 저장된 겂을 인터페이스로 띄운다.
 
                 // 2-2. 지정 윷던지기 경우
-                // UI) selectDiceResult 호출
-                // currentDiceResult[]에 값 저장
+                // currentDiceResult[]에 있는 값을 순서대로 유저가
 
 
             // 3. 
