@@ -14,19 +14,19 @@ public class Board {
         switch(numberOfShape){
             case 4: {
                 pathNodes=new PathNode[30]; //가운데 중복 인덱스로 30자리 배열로 선언하였음
-                for(int i=0; i<29; i++){
+                for(int i=0; i<30; i++){
                     pathNodes[i]=new PathNode(i, 4);
                 }
             } break;
             case 5: {
-                pathNodes=new PathNode[33];
-                for(int i=0; i<33; i++){
+                pathNodes=new PathNode[40];
+                for(int i=0; i<40; i++){
                     pathNodes[i]=new PathNode(i, 5);
                 }
             } break;
             case 6: {
-                pathNodes=new PathNode[43];
-                for(int i=0; i<43; i++){
+                pathNodes=new PathNode[50];
+                for(int i=0; i<50; i++){
                     pathNodes[i]=new PathNode(i, 6);
                 }
             } break;
