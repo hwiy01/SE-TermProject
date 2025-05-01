@@ -19,10 +19,11 @@ public class GameManager {
             //반환값을 아래 두 상황으로 분기한다.
         
                 // 2-1. 랜덤 윷던지기 경우(일괄) 
-                // currentDiceResult에 저장된 겂을 인터페이스로 띄운다.
+                // UI) showDiceResult 호출
+               
 
                 // 2-2. 지정 윷던지기 경우
-                // currentDiceResult[]에 있는 값을 순서대로 유저가
+                // selectWhickDiceToThrow를 호출하여 유저가 어떤 윷을 던질지, 그 윷의 결과는 무엇인지에 관한 처리를 진행한다.
 
 
             // 3. 
