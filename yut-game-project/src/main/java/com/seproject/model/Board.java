@@ -1,8 +1,12 @@
+package com.seproject.model;
+
 public class Board {
     private PathNode[] pathNodes;
     private int numberOfShape; //모양 정보를 저장한다. 
 
-    public int getNumberOfShape(){};
+    public int getNumberOfShape(){
+        return numberOfShape;
+    };
 
     public Board(int numberOfShape){
         //생성자이다. N을 변수로 받고 numberOfShape형 게임판을 생성한다. N의 개수는 현재 2025.04.20 기준으로 4, 5, 6이다. 요구 사항이 바뀔 때마다 바뀔 가능성이 있기에 날짜를 써 놓았다. 아래는 어레이 길이 예시이다.
