@@ -62,6 +62,7 @@ public class GameManager {
         this.board = gameBoard;
         this.currentTurn = 0;
         this.oneMoreChance = false;
+        playerScores = new int[numberOfPlayers];
 
         this.dice = new Dice[4];
         for (int i = 0; i < 4; i++) {
@@ -118,9 +119,19 @@ public class GameManager {
         processMove함수의 마지막 처리로 iscaptureOrGroup을 호출한다. 그렇게 하면 이론상 시작 위치를 제외한 다른 위치에서 다른 팀의 말끼리의 공존을 막을 수 있다.  */
     };
 
+    private int[] playerScores;
     public void scoreUp(int pieceId){
         //pieceId에 해당하는 게임 말을 조회하고, 그 말의 수만큼 그 팀(개인전이므로 해당 플레이어가 된다)의 스코어를 올린다.
         // 이후 그 말(들)은 위치 정보를 -1로 표기한다. (승리조건과 디버깅을 위해, 그리고 이러한 값 설정은 추적에도 용이하다.)
+        Piece piece = gamePieces[currentTurn][pieceId]; // 현재 플레이어 기준
+        int playerId = piece.getPlayerId();             // 말에 저장된 플레이어 ID
+        int groupSize = piece.getEachPieces().size(); // 말에 업힌 개수
+
+        playerScores[playerId] += groupSize;
+        piece.setPathNodeId(-1);
+
+        System.out.println("Player " + players[playerId].getName() +
+                " scored " + groupSize + " point(s)!");
     };
 
     public void isCaptureOrGroup(int srcNodeId){
@@ -128,8 +139,45 @@ public class GameManager {
         //인자로 받은 위치를 조회하고, 그 위치에 존재하는 모든 말을 추적하여 만일 겹치는 말이 있다면 잡을지 업을지 결정한다.
         // 방금 윷을 던진 팀을 추적하고, 해당 위치에 있는 다른 말이 상태 편 말이라면 상대편 말(들)의 위치를 0으로 바꾸고 oneMoreChance를 1로 바꾸고 return한다.
         // 이는 상대편 말이 잡혀서 시작 위치로 돌아간 것과 잡으면 한번 더 하는 것을 구현한 것이다.
-        // 그게 아군의 말이라면 그 위치에 있는 모든 아군의 말들에 관한 업기 연산을 수행한다. 그 후return한다. (업기)’
+        // 그게 아군의 말이라면 그 위치에 있는 모든 아군의 말들에 관한 업기 연산을 수행한다. 그 후 return한다. (업기)’
 
+        if (srcNodeId==0) return; // 시작 위치에서는 겹침을 무시한다.
+
+        Piece movedPiece=null; // 현재 턴에 이동한 자신의 말
+
+        // 현재 턴의 플레이어 말 중에서 srcNodeId에 위치한 말 찾기
+        for (int i = 0; i < numberOfPiecesForEachPlayer; i++) {
+            Piece piece = gamePieces[currentTurn][i];
+            if (piece.getCurrentPathNodeId() == srcNodeId) {
+                movedPiece = piece;
+                break;
+            }
+        }
+        // 모든 플레이어의 말들을 검사해서 겹치는 말이 있는지 확인
+        for (int i = 0; i < numberOfPlayers; i++) {
+            for (int j = 0; j < numberOfPiecesForEachPlayer; j++) {
+                Piece target = gamePieces[i][j];
+
+                // 자기 자신은 건너뜀
+                if (i == currentTurn && target == movedPiece) continue;
+
+                // 같은 위치에 있는 다른 말 발견
+                if (target.getCurrentPathNodeId() == srcNodeId) {
+                    if (target.getPlayerId() != currentTurn) {
+                        // 적군 말이면 잡기
+                        target.setPathNodeId(-1); // 상대 말 제거
+                        oneMoreChance = true;
+                        System.out.println("Player " + currentTurn + " captured opponent piece!");
+                    } else {
+                        // 아군 말이면 업기
+                        movedPiece.groupPiece(target);
+                        target.setPathNodeId(-1); // 기존 말을 비활성화
+                        System.out.println("Player " + currentTurn + " grouped with own piece.");
+                    }
+                    return;
+                }
+            }
+        }
 
         //그리고 isCapturedOrGrouped 기능이 넘 커지는 것 같아서 이 함수는 겹치는지 비교만하고, 잡거나 그룹화 하는 코드는 분리해서 함수로 만드는 거 어때요? -> iscapturedOrGrouped는 그냥 위치에 있는 말 조회해서 겹치는게 있나 있다면 상대편거가 섞여있나 섞여있다고? 너 시작위치로! 아니라고? 그냥 grouped1로 바꾸고 리턴 
     };
