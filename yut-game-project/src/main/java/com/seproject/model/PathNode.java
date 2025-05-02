@@ -124,7 +124,7 @@ public class PathNode {
                     possibleGurlMove=0;
                     possibleYutMove=40;
                     possibleMoMove=40;
-                    possibleBackDoMove=31;
+                    possibleBackDoMove=pathNodeId-1;
                 }
                 else if(pathNodeId>24 && pathNodeId<30){
                     possibleDoMove=((pathNodeId+1)/30)*20+((pathNodeId+1)%30);
@@ -228,7 +228,7 @@ public class PathNode {
                     possibleGurlMove=0;
                     possibleYutMove=50;
                     possibleMoMove=50;
-                    possibleBackDoMove=36;
+                    possibleBackDoMove=pathNodeId-1;
                 }
                 else if(pathNodeId>29 && pathNodeId<35){
                     possibleDoMove=((pathNodeId+1)/35)*25+((pathNodeId+1)%35);
