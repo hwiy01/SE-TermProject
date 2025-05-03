@@ -1,5 +1,8 @@
+package com.seproject.view;
 
 import com.seproject.enums.DiceResult;
+import com.seproject.model.Board;
+import com.seproject.model.Player;
 
 public class GamePlayUI {
     public void updateBoard(Board gameBoard){
