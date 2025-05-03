@@ -1,3 +1,5 @@
+package com.seproject.model;
+
 public class EachPiece {
     public EachPiece(int eachPieceId, int palyerId) {
         this.eachPieceId=eachPieceId;
