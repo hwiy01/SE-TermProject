@@ -38,4 +38,9 @@ public class Piece {
     public void separatePieceGroup(){
 
     }; //piece를 분리하는 기능이 꼭 필요한가? 말이 잡혔을 경우 객체 자체를 제거하고 다시 출발할 때 piece 객체를 생성하면 어떨까?
+
+    public int getCurrentPathNodeId() {
+        return currentPathNodeId;
+    }
+
 }
