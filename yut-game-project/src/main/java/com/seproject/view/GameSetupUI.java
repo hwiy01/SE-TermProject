@@ -124,7 +124,7 @@ public class GameSetupUI extends JFrame {
         JPanel name = new JPanel(new GridLayout(numberOfPlayer, 2, 5, 5));
         ArrayList<JTextField> inputName = new ArrayList<>();
         for(int i=0; i<numberOfPlayer; i++){
-            name.add(new JLabel("Name of Player" + i+1 + ": "));
+            name.add(new JLabel("Name of Player" + (i+1) + ": "));
             JTextField field = new JTextField();
             inputName.add(field);
             name.add(field);
@@ -146,12 +146,18 @@ public class GameSetupUI extends JFrame {
                         JOptionPane.showMessageDialog(subFrame, "Input all names");
                         return;
                     }
-                    names[i] = field.getText().trim(); //문제 없으면 입력된 이름을 배열에 저장
                 }
+                names[i] = field.getText().trim(); //문제 없으면 입력된 이름을 배열에 저장
                 i++;
             }
+
+            subFrame.dispose(); //서브 창 제거
         });
-        subFrame.dispose(); //서브 창 제거
+        subFrame.add(name, BorderLayout.CENTER);
+        subFrame.add(start, BorderLayout.SOUTH);
+        subFrame.pack();
+        subFrame.setLocationRelativeTo(this);
+        subFrame.setVisible(true);
         this.dispose(); //메인 창 제거 -> 다음 단계로 넘어간다 (게임 실행 단계)
         return names; //입력된 이름을 반환한다
     };

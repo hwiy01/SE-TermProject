@@ -246,7 +246,7 @@ public class GameManager {
         this.board = new Board(shape);
     }
 
-    //플레이어의 이름 배열을 받아와서 각 이름으로 Player객체를 생성한다
+    //플레이어의 이름 배열을 받아와서 각 이름으로 Player 객체를 생성한다
     public void setPlayerName(String[] names){
         for(int i=0; i<numberOfPlayers; i++){
             players[i] = new Player(names[i], i); //플레이어의 ID는 0부터 순차적으로 증가시키면서 지정한다
@@ -271,4 +271,7 @@ public class GameManager {
         return players[currentTurn];
     }
 
+    public int getNumberOfPiecesPerPlayer() {
+        return numberOfPiecesForEachPlayer;
+    }
 }
