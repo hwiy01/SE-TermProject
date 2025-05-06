@@ -101,17 +101,17 @@ public class GameSetupUI extends JFrame {
         //메인 메뉴를 보여준다.
     };
 
-    public int showNumberOfPiecesInEachPlayerChoice(){
-        //각각의 플레이어가 몇 개의 말을 사용할 것인지 사용자에게서 입력받는다.   
-    }
-
-    public int showNumberOfPlayersChoice(){
-        //플레이어가 몇명할지 선택하도록 창을 띄우고 입력받는다
-    };
-
-    public int showBoardShapeChoice(){
-        //게임 보드를 선택하도록 창을 띄우고 입력받는다
-    };
+//    public int showNumberOfPiecesInEachPlayerChoice(){
+//        //각각의 플레이어가 몇 개의 말을 사용할 것인지 사용자에게서 입력받는다.
+//    }
+//
+//    public int showNumberOfPlayersChoice(){
+//        //플레이어가 몇명할지 선택하도록 창을 띄우고 입력받는다
+//    };
+//
+//    public int showBoardShapeChoice(){
+//        //게임 보드를 선택하도록 창을 띄우고 입력받는다
+//    };
     
     //이름 입력 창
     public String[] showNicknameInput(int numberOfPlayer){
@@ -129,10 +129,11 @@ public class GameSetupUI extends JFrame {
             name.add(field);
         }
 
+        String[] names = new String[numberOfPlayer]; //입력받은 이름을 저장할 배열
         //start 버튼 -> 클릭 시 게임이 시작된다 (이름을 전부 입력하지 않거나 중복 이름을 입력할 경우 메시지 출력 후 다시 입력받는다)
         JButton start = new JButton("START");
         start.addActionListener((ActionEvent e) -> { //버튼 클릭 이벤트
-            String[] names = new String[numberOfPlayer]; //입력받은 이름을 저장할 배열
+
             int i = 0; //저장한 이름의 개수 -> 이름이 중복인지 확인하기 위한 것
             for(JTextField field : inputName){ //입력된 이름을 하나씩 가져와서 for문을 실행한다
                 for(int j=0; j<i; j++){ //중복인지 확인

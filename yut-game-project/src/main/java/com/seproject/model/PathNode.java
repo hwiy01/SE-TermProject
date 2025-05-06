@@ -19,7 +19,7 @@ public class PathNode {
                     possibleMoMove=30;
                     possibleBackDoMove=19;
                 }
-                eles if(pathNodeId==-5){
+                else if(pathNodeId==-5){
                     possibleDoMove=1;
                     possibleGaeMove=2;
                     possibleGurlMove=3;
@@ -118,7 +118,7 @@ public class PathNode {
                     possibleMoMove=40;
                     possibleBackDoMove=24;
                 }
-                eles if(pathNodeId==-5){
+                else if(pathNodeId==-5){
                     possibleDoMove=1;
                     possibleGaeMove=2;
                     possibleGurlMove=3;
@@ -230,7 +230,7 @@ public class PathNode {
                     possibleMoMove=50;
                     possibleBackDoMove=29;
                 }
-                eles if(pathNodeId==-5){
+                else if(pathNodeId==-5){
                     possibleDoMove=1;
                     possibleGaeMove=2;
                     possibleGurlMove=3;
