@@ -6,12 +6,14 @@ public class Piece {
         this.pieceId=pieceId;
         this.playerId=playerId;
         this.currentPathNodeId=-5; // 보드 판 위에 없기 위해 아무 숫자로 초기화
+        this.selected = false; // 처음에는 모두 클릭되지 않은 상태
         pieces = new ArrayList<>();
         pieces.add(new EachPiece(pieceId, playerId)); //기본 eachPiece 객체 하나 배열에 저장
     }; // 생성자
 	private int pieceId;
 	private int playerId;
     private int currentPathNodeId; //0으로 초기화
+    public boolean selected; // 마우스 클릭 상태
 
     //동적 배열로 선언하였음
 	private ArrayList<EachPiece> pieces; // 기본으로 배열에 EachPiece를 하나씩 갖고, 그룹화가 필요할 때마다 여기에 하나씩 추가된다. 이런 식으로 그룹화에 관한 사항을 내부적으로 구현할 수 있다.}

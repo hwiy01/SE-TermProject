@@ -102,6 +102,30 @@ public class PathNode {
                         possibleMoMove=0;
                     }
                 }
+                if(pathNodeId>=0 && pathNodeId<6){
+                    x_ratio=0.9;
+                    y_ratio=0.9 - (pathNodeId*0.16);
+                }
+                else if(pathNodeId>=6 && pathNodeId<11){
+                    x_ratio=0.9 - ((pathNodeId-5)*0.16);
+                    y_ratio=0.1;
+                }
+                else if(pathNodeId>=11 && pathNodeId<16){
+                    x_ratio=0.1;
+                    y_ratio=0.1 + ((pathNodeId-10)*0.16);
+                }
+                else if(pathNodeId>=16 && pathNodeId<20){
+                    x_ratio=0.1+((pathNodeId-15)*0.16);
+                    y_ratio=0.9;
+                }
+                else if(pathNodeId>=20 && pathNodeId<25){
+                    x_ratio=0.9 - ((pathNodeId-19)*0.13);
+                    y_ratio=0.1 + ((pathNodeId-19)*0.13);
+                }
+                else if(pathNodeId>=25 && pathNodeId<30){
+                    x_ratio=0.12 + ((pathNodeId-24)*0.13); // 중앙 노드 겹치게 하기 위함임
+                    y_ratio=0.1 * ((pathNodeId-24)*0.13);
+                }
             } break;
             case 5:{ //오각형
                 if(pathNodeId==5 || pathNodeId==10 || pathNodeId==15){
@@ -352,6 +376,8 @@ public class PathNode {
     private int possibleYutMove;
     private int possibleMoMove;
     private int possibleBackDoMove;
+    public double x_ratio; // x축 위치 비율
+    public double y_ratio; // y축 위치 비율
 
     public int getPossibleDoMove(){
         return possibleDoMove;
