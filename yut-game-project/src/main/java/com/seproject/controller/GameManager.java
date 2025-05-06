@@ -10,7 +10,7 @@ import com.seproject.view.GamePlayUI;
 
 public class GameManager {
     public void playGame(){
-
+        this.gamePlayUI = new GamePlayUI(this); // 테스트용
         // 게임 플레이 로직
 
         // 1.

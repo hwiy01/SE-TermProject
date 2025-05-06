@@ -1,5 +1,8 @@
 package com.seproject;
 
+import com.seproject.controller.GameManager;
+import com.seproject.view.GameSetupUI;
+
 /**
  * Hello world!
  *
@@ -10,7 +13,10 @@ public class App
     {
         // GameManager 객체 생성
         // GameManager의 playGame 함수 호출, 모든 실행 여기서 관여
-
+        javax.swing.SwingUtilities.invokeLater(() -> {
+            GameManager gameManager = new GameManager(); // 네가 만든 GameManager 객체 생성
+            new GameSetupUI(gameManager); // UI 실행
+        });
         // 1. 
         // GameSetUpUI , GamePlayUI,  생성 
         // GameSetupUI.ShowMainMenu() 호출 //  아래의 옵션들

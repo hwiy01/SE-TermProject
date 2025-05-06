@@ -87,6 +87,7 @@ public class GameSetupUI extends JFrame {
             }
             //이름 입력 창 띄우고 입력받은 이름을 gamemanager에 있는 player들의 이름에 저장한다
             gameManager.setPlayerName(showNicknameInput((Integer)playerCombo.getSelectedItem()));
+            gameManager.playGame();
         });
 
         //next 버튼을 화면 하단에 추가한다
