@@ -19,6 +19,14 @@ public class PathNode {
                     possibleMoMove=30;
                     possibleBackDoMove=19;
                 }
+                eles if(pathNodeId==-5){
+                    possibleDoMove=1;
+                    possibleGaeMove=2;
+                    possibleGurlMove=3;
+                    possibleYutMove=4;
+                    possibleMoMove=5;
+                    possibleBackDoMove=-5;
+                }
                 else if(inBranch==1){
                     possibleDoMove=pathNodeId+15;
                     possibleGaeMove=pathNodeId+16;
@@ -109,6 +117,14 @@ public class PathNode {
                     possibleYutMove=40;
                     possibleMoMove=40;
                     possibleBackDoMove=24;
+                }
+                eles if(pathNodeId==-5){
+                    possibleDoMove=1;
+                    possibleGaeMove=2;
+                    possibleGurlMove=3;
+                    possibleYutMove=4;
+                    possibleMoMove=5;
+                    possibleBackDoMove=-5;
                 }
                 else if(inBranch==1){ // 5번 분기점과 10번 분기점에서 동일하게 더하므로 28-33, 29-34 쌍으로 같은 노드를 의미한다
                     possibleDoMove=pathNodeId+20;
@@ -213,6 +229,14 @@ public class PathNode {
                     possibleYutMove=50;
                     possibleMoMove=50;
                     possibleBackDoMove=29;
+                }
+                eles if(pathNodeId==-5){
+                    possibleDoMove=1;
+                    possibleGaeMove=2;
+                    possibleGurlMove=3;
+                    possibleYutMove=4;
+                    possibleMoMove=5;
+                    possibleBackDoMove=-5;
                 }
                 else if(inBranch==1){
                     possibleDoMove=pathNodeId+25;
