@@ -5,7 +5,7 @@ public class Piece {
     public Piece(int pieceId, int playerId){
         this.pieceId=pieceId;
         this.playerId=playerId;
-        this.currentPathNodeId=0;
+        this.currentPathNodeId=-5; // 보드 판 위에 없기 위해 아무 숫자로 초기화
         pieces = new ArrayList<>();
         pieces.add(new EachPiece(pieceId, playerId)); //기본 eachPiece 객체 하나 배열에 저장
     }; // 생성자
