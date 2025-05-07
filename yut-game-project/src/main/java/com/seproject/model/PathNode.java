@@ -4,13 +4,17 @@ public class PathNode {
     public PathNode(int pathNodeId, int BoardType){
         //생성자이다. 로케이션 아이디와 게임판 형식을 인자로 받고 그 아이디에 대응하는 정보를 함수가 입력한다. 말을 움직일 때 이는 switch문으로 하나하나 처리되어야 한다. 아래는 게임판 타입 정수 변수가 4일때의 참고용 그림이다.
         switch(BoardType){
-            case 4:{ //사각형
+            case 4:{ // 사각형 말판
                 if(pathNodeId==5 || pathNodeId==10){
                     inBranch=1;
                 }
                 else{
                     inBranch=0;
                 }
+
+                // 네 꼭짓점 및 가운데 지점 -> 말판에 그릴때 원 2개로 표시하기 위함.
+                this.cross = pathNodeId == 0 || pathNodeId == 5 || pathNodeId == 10 || pathNodeId == 15 || pathNodeId == 22;
+
                 if(pathNodeId==0){ // 골인지점에 위치한 경우 빽도가 아니라면 30으로 이동해서 골인했음을 의미함 (30 이상은 모두 골인을 의미)
                     possibleDoMove=30;
                     possibleGaeMove=30;
@@ -139,6 +143,9 @@ public class PathNode {
                 else{
                     inBranch=0;
                 }
+
+                this.cross = pathNodeId == 0 || pathNodeId == 5 || pathNodeId == 10 || pathNodeId == 15 || pathNodeId == 20 || pathNodeId == 27;
+
                 if(pathNodeId==0){ // 골인지점에 위치한 경우 빽도가 아니라면 골인했음을 의미하는 ??로 이동
                     possibleDoMove=40;
                     possibleGaeMove=40;
@@ -295,6 +302,9 @@ public class PathNode {
                 else{
                     inBranch=0;
                 }
+
+                this.cross = pathNodeId == 0 || pathNodeId == 5 || pathNodeId == 10 || pathNodeId == 15 || pathNodeId == 20 || pathNodeId == 25 || pathNodeId == 42;
+
                 if(pathNodeId==0){ // 골인지점에 위치한 경우 빽도가 아니라면 골인했음을 의미하는 50으로 이동
                     possibleDoMove=50;
                     possibleGaeMove=50;
@@ -439,6 +449,9 @@ public class PathNode {
                 else if(pathNodeId>=30 && pathNodeId<33){
                     x_ratio = 0.89 - ((pathNodeId-29)*0.13); // 중앙 노드 : 0.5,0.5
                     y_ratio = 0.5;
+                    if (pathNodeId == 32) {
+                        this.visible = false;
+                    }
                 }
                 else if(pathNodeId>=33 && pathNodeId<35){
                     x_ratio = 0.5 - ((pathNodeId-32)*0.07);
@@ -447,10 +460,14 @@ public class PathNode {
                 else if(pathNodeId>=35 && pathNodeId<40){
                     x_ratio = 0.71 - ((pathNodeId-34)*0.07);
                     y_ratio = 0.11 + ((pathNodeId-34)*0.13);
+                    if (pathNodeId == 37) {
+                        this.visible = false;
+                    }
                 }
                 else if(pathNodeId>=40 && pathNodeId<43){
                     x_ratio = 0.29 + ((pathNodeId-39)*0.07);
                     y_ratio = 0.11 + ((pathNodeId-39)*0.13);
+
                 }
                 else if(pathNodeId>=43 && pathNodeId<45){
                     x_ratio = 0.5 - ((pathNodeId-42)*0.07);
@@ -506,8 +523,7 @@ public class PathNode {
     };
 
     private boolean visible = true;
+    private boolean cross = false;
     public boolean isVisible() { return visible; }
-    public void setVisible(boolean visible) { this.visible = visible; }
-
-
+    public boolean isCross(){return cross; }
 };

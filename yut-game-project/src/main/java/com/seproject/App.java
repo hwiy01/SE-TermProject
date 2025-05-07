@@ -14,7 +14,7 @@ public class App
             new GameSetupUI(gameManager); // UI 실행
         });
         // 1. 
-        // GameSetUpUI , GamePlayUI,  생성 
+        // GameSetUpUI , GamePlayUI, 생성
         // GameSetupUI.ShowMainMenu() 호출 //  아래의 옵션들
         // GameSetupUI.ShowNumberOfPiecesInEachPlayerChoice(),  showNumberOfPlayersChoice(), showBoardShapeChoice() showNicknameInput() 호출하여 첫 게임에 필요한 환경설정
 
