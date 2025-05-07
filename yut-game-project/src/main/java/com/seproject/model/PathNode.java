@@ -123,8 +123,13 @@ public class PathNode {
                     y_ratio=0.1 + ((pathNodeId-19)*0.13);
                 }
                 else if(pathNodeId>=25 && pathNodeId<30){
-                    x_ratio=0.12 + ((pathNodeId-24)*0.13); // 중앙 노드 겹치게 하기 위함임
-                    y_ratio=0.1 * ((pathNodeId-24)*0.13);
+//                    x_ratio=0.12 + ((pathNodeId-24)*0.13); // 중앙 노드 겹치게 하기 위함임
+//                    y_ratio=0.1 * ((pathNodeId-24)*0.13);
+                    if (pathNodeId == 27) {
+                        this.visible = false;
+                    }
+                    x_ratio = 0.25 + ((pathNodeId - 25) * 0.12);
+                    y_ratio = 0.25 + ((pathNodeId - 25) * 0.12);
                 }
             } break;
             case 5:{ //오각형
@@ -403,5 +408,10 @@ public class PathNode {
     public int getInBranch() {
         return inBranch;
     };
+
+    private boolean visible = true;
+    public boolean isVisible() { return visible; }
+    public void setVisible(boolean visible) { this.visible = visible; }
+
 
 };

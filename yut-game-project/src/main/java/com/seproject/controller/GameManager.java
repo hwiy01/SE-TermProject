@@ -274,4 +274,8 @@ public class GameManager {
     public int getNumberOfPiecesPerPlayer() {
         return numberOfPiecesForEachPlayer;
     }
+
+    public Board getBoard() {
+        return board;
+    }
 }

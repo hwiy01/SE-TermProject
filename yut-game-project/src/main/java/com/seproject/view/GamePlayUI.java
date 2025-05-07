@@ -8,7 +8,7 @@ import com.seproject.model.Player;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
 
 public class GamePlayUI extends JFrame {
     private JLabel resultLabel;
@@ -47,10 +47,9 @@ public class GamePlayUI extends JFrame {
         // 상단 패널을 NORTH에 추가
         add(topPanel, BorderLayout.NORTH);
 
-        // 중앙 - 말판
-        JPanel centerPanel = new JPanel();
-        centerPanel.setBackground(Color.PINK); // 말판 자리
-        add(centerPanel, BorderLayout.CENTER);
+        BoardPanel boardPanel = new BoardPanel(gameManager.getBoard());
+        add(boardPanel, BorderLayout.CENTER);
+
 
         // 왼쪽 - 플레이어 정보 + 랜덤 윷 버튼
         JPanel leftPanel = new JPanel(new GridLayout(3, 1));
@@ -146,29 +145,30 @@ public class GamePlayUI extends JFrame {
         JOptionPane.showMessageDialog(this, player.getName() + " 님이 승리하였습니다!", "게임 종료", JOptionPane.INFORMATION_MESSAGE);
 
     };
-    // 마우스 클릭 이벤트
-    addMouseListener(new MouseAdapter() {
-        public void mouseClicked(MouseEvent e) {
-            int size = Math.min(getWidth(), getHeight());
 
-            // 한 번에 하나만 선택되게
-            for (YutPiece piece : pieces) {
-                if (piece.contains(e.getX(), e.getY(), size)) {
-                    for (YutPiece p : pieces) p.selected = false;
-                    piece.selected = true;
-                    repaint();
-                    break;
-                }
-            }
-        }
-    });
-    // 마우스 클릭 여부 판단 패널의 사이즈를 바뀌면 말의 크기도 바뀌면서 마우스 선택 영역 조절됨
-    public boolean contains(int mouseX, int mouseY, int panelSize) {
-        int px = (int) (x * panelSize);
-        int py = (int) (y * panelSize);
-        int r = panelSize / 10;
-
-        return new Rectangle(px - r, py - r, 2 * r, 2 * r).contains(mouseX, mouseY);
-    }
+//    // 마우스 클릭 이벤트
+//    addMouseListener(new MouseAdapter() {
+//        public void mouseClicked(MouseEvent e) {
+//            int size = Math.min(getWidth(), getHeight());
+//
+//            // 한 번에 하나만 선택되게
+//            for (YutPiece piece : pieces) {
+//                if (piece.contains(e.getX(), e.getY(), size)) {
+//                    for (YutPiece p : pieces) p.selected = false;
+//                    piece.selected = true;
+//                    repaint();
+//                    break;
+//                }
+//            }
+//        }
+//    });
+//    // 마우스 클릭 여부 판단 패널의 사이즈를 바뀌면 말의 크기도 바뀌면서 마우스 선택 영역 조절됨
+//    public boolean contains(int mouseX, int mouseY, int panelSize) {
+//        int px = (int) (x * panelSize);
+//        int py = (int) (y * panelSize);
+//        int r = panelSize / 10;
+//
+//        return new Rectangle(px - r, py - r, 2 * r, 2 * r).contains(mouseX, mouseY);
+//    }
 
 }

@@ -3,10 +3,6 @@ package com.seproject;
 import com.seproject.controller.GameManager;
 import com.seproject.view.GameSetupUI;
 
-/**
- * Hello world!
- *
- */
 public class App 
 {
     public static void main( String[] args )
