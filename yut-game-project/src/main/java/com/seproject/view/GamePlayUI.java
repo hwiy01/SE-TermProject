@@ -80,7 +80,7 @@ public class GamePlayUI extends JFrame {
         rollRandomButton.addActionListener((ActionEvent e) -> {
             DiceResult result = gameManager.rollDice();
             showDiceResult(result);
-            // TODO: 실제 말 이동 로직 (processMove) 호출
+            // processMove 호출
             // 예시: 사용자가 말을 선택하고 이동하는 로직이 여기에 들어간다고 가정
             // if (말 이동이 성공적으로 완료되었다면) {
             //    updatePlayerAndWaitingPiecesInfo(); // 말 상태 변경 후 UI 업데이트
@@ -116,7 +116,7 @@ public class GamePlayUI extends JFrame {
             DiceResult result = selectDiceResult();
             if (result == null) return; // 사용자가 선택 취소한 경우
             showDiceResult(result);
-            // TODO: 실제 말 이동 로직 (processMove) 호출
+            // processMove 호출
             // if (말 이동이 성공적으로 완료되었다면) {
             //    updatePlayerAndWaitingPiecesInfo();
             // }
