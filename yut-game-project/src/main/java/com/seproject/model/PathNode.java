@@ -280,7 +280,7 @@ public class PathNode {
                     y_ratio = 0.58 + ((pathNodeId - 32)*0.1);
                 }
                 else if(pathNodeId>=35 && pathNodeId<38){
-                    x_ratio = 0.11 + ((pathNodeId-34)*13);
+                    x_ratio = 0.11 + ((pathNodeId-34)*0.13);
                     y_ratio = 0.43 + ((pathNodeId-34)*0.05);
                 }
                 else if(pathNodeId>=38 && pathNodeId<40){
@@ -411,6 +411,58 @@ public class PathNode {
                     else if(possibleMoMove==30){
                         possibleMoMove=0;
                     }
+                }
+                if(pathNodeId>=0 && pathNodeId<6){
+                    x_ratio = 0.7 + (pathNodeId*0.04);
+                    y_ratio = 0.9 - (pathNodeId*0.08);
+                }
+                else if(pathNodeId>=6 && pathNodeId<11){
+                    x_ratio = 0.9 - ((pathNodeId-5)*0.04);
+                    y_ratio = 0.5 - ((pathNodeId-5)*0.08);
+                }
+                else if(pathNodeId>=11 && pathNodeId<16){
+                    x_ratio = 0.7 - ((pathNodeId-10)*0.08);
+                    y_ratio = 0.1;
+                }
+                else if(pathNodeId>=16 && pathNodeId<21){
+                    x_ratio = 0.3 - ((pathNodeId-15)*0.04);
+                    y_ratio = 0.1 + ((pathNodeId-15)*0.08);
+                }
+                else if(pathNodeId>=21 && pathNodeId<26){
+                    x_ratio = 0.1 + ((pathNodeId-20)*0.04);
+                    y_ratio = 0.5 + ((pathNodeId-20)*0.08);
+                }
+                else if(pathNodeId>=26 && pathNodeId<30){
+                    x_ratio = 0.3 + ((pathNodeId-25)*0.08);
+                    y_ratio = 0.9;
+                }
+                else if(pathNodeId>=30 && pathNodeId<33){
+                    x_ratio = 0.89 - ((pathNodeId-29)*0.13); // 중앙 노드 : 0.5,0.5
+                    y_ratio = 0.5;
+                }
+                else if(pathNodeId>=33 && pathNodeId<35){
+                    x_ratio = 0.5 - ((pathNodeId-32)*0.07);
+                    y_ratio = 0.5 + ((pathNodeId-32)*0.13);
+                }
+                else if(pathNodeId>=35 && pathNodeId<40){
+                    x_ratio = 0.71 - ((pathNodeId-34)*0.07);
+                    y_ratio = 0.11 + ((pathNodeId-34)*0.13);
+                }
+                else if(pathNodeId>=40 && pathNodeId<43){
+                    x_ratio = 0.29 + ((pathNodeId-39)*0.07);
+                    y_ratio = 0.11 + ((pathNodeId-39)*0.13);
+                }
+                else if(pathNodeId>=43 && pathNodeId<45){
+                    x_ratio = 0.5 - ((pathNodeId-42)*0.07);
+                    y_ratio = 0.5 + ((pathNodeId-42)*0.13);
+                }
+                else if(pathNodeId>=45 && pathNodeId<48){
+                    x_ratio = 0.11 + ((pathNodeId-44)*0.13);
+                    y_ratio = 0.5;
+                }
+                else if(pathNodeId>=48 && pathNodeId<50){
+                    x_ratio = 0.5 + ((pathNodeId-47)*0.07);
+                    y_ratio = 0.5 + ((pathNodeId-47)*0.13);
                 }
             }break;
         }
