@@ -20,6 +20,11 @@ public class GamePlayUI extends JFrame {
     private JButton rollSpecificButton; // 지정 윷 던지기 버튼
     private JLabel[] playerInfoLabels = new JLabel[4]; // 4개의 플레이어 정보
     private GameManager gameManager;
+    private WaitingPieceDisplayPanel[] waitingPieceDisplays; // 새로 추가될 필드
+    private JPanel[] playerSlots; // 플레이어 정보와 대기 말을 함께 담을 패널 배열
+    private static final Color[] PLAYER_COLORS = {
+            Color.RED, Color.BLUE, Color.GREEN, Color.ORANGE
+    };
 
     public GamePlayUI(final GameManager gameManager) {
         this.gameManager = gameManager;
@@ -44,52 +49,94 @@ public class GamePlayUI extends JFrame {
         BoardPanel boardPanel = new BoardPanel(gameManager.getBoard(), gameManager.getGamePieces());
         add(boardPanel, BorderLayout.CENTER);
 
-        // 왼쪽 - 플레이어 정보 + 랜덤 윷 버튼
-        JPanel leftPanel = new JPanel(new GridLayout(3, 1));
-        playerInfoLabels[0] = new JLabel("", SwingConstants.CENTER);
-        rollRandomButton = new JButton("랜덤 윷 던지기");
-        playerInfoLabels[2] = new JLabel("", SwingConstants.CENTER);
+        // 플레이어 정보 및 대기 말 표시를 위한 초기화
+        this.playerInfoLabels = new JLabel[4];
+        this.waitingPieceDisplays = new WaitingPieceDisplayPanel[4];
+        this.playerSlots = new JPanel[4];
 
+        for (int i = 0; i < 4; i++) {
+            playerSlots[i] = new JPanel();
+            playerSlots[i].setLayout(new BoxLayout(playerSlots[i], BoxLayout.Y_AXIS));
+            playerSlots[i].setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+
+            playerInfoLabels[i] = new JLabel("", SwingConstants.CENTER);
+            playerInfoLabels[i].setAlignmentX(Component.CENTER_ALIGNMENT);
+
+            waitingPieceDisplays[i] = new WaitingPieceDisplayPanel(i);
+            waitingPieceDisplays[i].setAlignmentX(Component.CENTER_ALIGNMENT);
+
+            playerSlots[i].add(playerInfoLabels[i]);
+            playerSlots[i].add(Box.createRigidArea(new Dimension(0, 5)));
+            playerSlots[i].add(waitingPieceDisplays[i]);
+        }
+
+        // 왼쪽 패널 수정
+        JPanel leftPanel = new JPanel();
+        leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS));
+        leftPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+        rollRandomButton = new JButton("랜덤 윷 던지기");
+        rollRandomButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         rollRandomButton.addActionListener((ActionEvent e) -> {
             DiceResult result = gameManager.rollDice();
             showDiceResult(result);
-            updateTurn();
+            // TODO: 실제 말 이동 로직 (processMove) 호출
+            // 예시: 사용자가 말을 선택하고 이동하는 로직이 여기에 들어간다고 가정
+            // if (말 이동이 성공적으로 완료되었다면) {
+            //    updatePlayerAndWaitingPiecesInfo(); // 말 상태 변경 후 UI 업데이트
+            // }
+
             if (gameManager.checkWinCondition()) {
                 showWinner(gameManager.getCurrentPlayer());
                 rollRandomButton.setEnabled(false);
                 rollSpecificButton.setEnabled(false);
             } else {
                 gameManager.nextTurn();
+                updateTurn(); // 현재 턴 표시 업데이트
+                updatePlayerAndWaitingPiecesInfo(); // 다음 턴 시작 시 대기 말 포함 전체 정보 업데이트
             }
         });
 
-        leftPanel.add(playerInfoLabels[0]);
+        leftPanel.add(playerSlots[0]); // 플레이어 1
+        leftPanel.add(Box.createVerticalGlue());
         leftPanel.add(rollRandomButton);
-        leftPanel.add(playerInfoLabels[2]);
+        leftPanel.add(Box.createVerticalGlue());
+        leftPanel.add(playerSlots[2]); // 플레이어 3
         add(leftPanel, BorderLayout.WEST);
 
-        // 오른쪽 - 플레이어 정보 + 지정 윷 버튼
-        JPanel rightPanel = new JPanel(new GridLayout(3, 1));
-        playerInfoLabels[1] = new JLabel("", SwingConstants.CENTER);
-        rollSpecificButton = new JButton("지정 윷 던지기");
-        playerInfoLabels[3] = new JLabel("", SwingConstants.CENTER);
 
+        // 오른쪽 패널 수정
+        JPanel rightPanel = new JPanel();
+        rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
+        rightPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+        rollSpecificButton = new JButton("지정 윷 던지기");
+        rollSpecificButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         rollSpecificButton.addActionListener((ActionEvent e) -> {
             DiceResult result = selectDiceResult();
+            if (result == null) return; // 사용자가 선택 취소한 경우
             showDiceResult(result);
-            updateTurn();
+            // TODO: 실제 말 이동 로직 (processMove) 호출
+            // if (말 이동이 성공적으로 완료되었다면) {
+            //    updatePlayerAndWaitingPiecesInfo();
+            // }
+
             if (gameManager.checkWinCondition()) {
                 showWinner(gameManager.getCurrentPlayer());
                 rollRandomButton.setEnabled(false);
                 rollSpecificButton.setEnabled(false);
             } else {
                 gameManager.nextTurn();
+                updateTurn();
+                updatePlayerAndWaitingPiecesInfo();
             }
         });
 
-        rightPanel.add(playerInfoLabels[1]);
+        rightPanel.add(playerSlots[1]); // 플레이어 2
+        rightPanel.add(Box.createVerticalGlue());
         rightPanel.add(rollSpecificButton);
-        rightPanel.add(playerInfoLabels[3]);
+        rightPanel.add(Box.createVerticalGlue());
+        rightPanel.add(playerSlots[3]); // 플레이어 4
         add(rightPanel, BorderLayout.EAST);
 
         // 마우스 클릭 이벤트
@@ -110,20 +157,27 @@ public class GamePlayUI extends JFrame {
             }
         });
 
-        updatePlayerInfo(); // 플레이어 정보 업데이트
+        updatePlayerAndWaitingPiecesInfo();
         setVisible(true);
     }
 
-    public void updatePlayerInfo() {
+    public void updatePlayerAndWaitingPiecesInfo() {
         int numPlayers = gameManager.getNumberOfPlayers();
-        int piecesPerPlayer = gameManager.getNumberOfPiecesPerPlayer();
-        for (int i = 0; i < 4; i++) {
+        int piecesPerPlayer = gameManager.getNumberOfPiecesPerPlayer(); // 총 말 개수
+
+        for (int i = 0; i < 4; i++) { // 최대 4개 슬롯
             if (i < numPlayers) {
                 String name = gameManager.getPlayerName(i);
-                playerInfoLabels[i].setText("<html>" + "<br/>이름: "+ name +
-                        "<br/>말: " + piecesPerPlayer + "</html>");
+                int waitingCount = gameManager.getNumberOfWaitingPieces(i); // 대기 중인 말 개수 가져오기
+
+                playerInfoLabels[i].setText("<html><div style='text-align: center;'>" +
+                        "이름: " + name + "<br>" +
+                        "총 말: " + piecesPerPlayer +
+                        "</div></html>");
+                waitingPieceDisplays[i].updateWaitingPieces(waitingCount); // 대기 말 개수 업데이트하여 다시 그리기
+                playerSlots[i].setVisible(true); // 해당 플레이어 슬롯 보이기
             } else {
-                playerInfoLabels[i].setText(""); // 빈칸
+                playerSlots[i].setVisible(false); // 참여하지 않는 플레이어 슬롯 숨기기
             }
         }
     }
@@ -137,11 +191,10 @@ public class GamePlayUI extends JFrame {
     }
 
     public DiceResult selectDiceResult(){
-        // 지정 윷던지기의 경우 선택지 보여주어 선택하도록 함
         DiceResult[] values = DiceResult.values();
         return (DiceResult) JOptionPane.showInputDialog(
                 this, "윷 결과를 선택하세요:", "지정 윷 결과 선택",
-                JOptionPane.PLAIN_MESSAGE, null, values, values[0]);
+                JOptionPane.PLAIN_MESSAGE, null, values, values[0]); // 선택된 결과 또는 null 반환
     }
 
     public void showDiceResult(DiceResult result){
