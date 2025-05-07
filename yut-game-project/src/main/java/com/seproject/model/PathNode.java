@@ -243,6 +243,50 @@ public class PathNode {
                         possibleMoMove=0;
                     }
                 }
+                if(pathNodeId>=0 && pathNodeId<6){
+                    x_ratio=0.75 + (pathNodeId*0.03);
+                    y_ratio=0.9 - (pathNodeId*0.096);
+                }
+                else if(pathNodeId>=6 && pathNodeId<11){
+                    x_ratio=0.9- ((pathNodeId-5)*0.08);
+                    y_ratio=0.42 - ((pathNodeId-5)*0.064);
+                }
+                else if(pathNodeId>=11 && pathNodeId<16){
+                    x_ratio=0.5 - ((pathNodeId-10)*0.08);
+                    y_ratio=0.1 + ((pathNodeId-10)*0.064);
+                }
+                else if(pathNodeId>=16 && pathNodeId<21){
+                    x_ratio=0.1 + ((pathNodeId-15)*0.03);
+                    y_ratio=0.42 + ((pathNodeId-15)*0.096);
+                }
+                else if(pathNodeId>=21 && pathNodeId<25){
+                    x_ratio=0.25 + ((pathNodeId-20)*0.1);
+                    y_ratio = 0.9;
+                }
+                else if(pathNodeId>=25 && pathNodeId<28){
+                    x_ratio=0.89 - ((pathNodeId-24)*0.13);
+                    y_ratio=0.43 + ((pathNodeId-24)*0.05); //중앙 노드의 좌표 비 : 0.5, 0.58
+                }
+                else if(pathNodeId>=28 && pathNodeId<30){
+                    x_ratio=0.5 - ((pathNodeId-27)*0.08);
+                    y_ratio=0.58 + ((pathNodeId-27)*0.1);
+                }
+                else if(pathNodeId>=30 && pathNodeId<33){
+                    x_ratio=0.5;
+                    y_ratio=0.1 + ((pathNodeId - 29)*0.16);
+                }
+                else if(pathNodeId>=33 && pathNodeId<35){
+                    x_ratio = 0.5 - ((pathNodeId - 32)*0.08);
+                    y_ratio = 0.58 + ((pathNodeId - 32)*0.1);
+                }
+                else if(pathNodeId>=35 && pathNodeId<38){
+                    x_ratio = 0.11 + ((pathNodeId-34)*13);
+                    y_ratio = 0.43 + ((pathNodeId-34)*0.05);
+                }
+                else if(pathNodeId>=38 && pathNodeId<40){
+                    x_ratio = 0.5 + ((pathNodeId-37)*0.08);
+                    y_ratio = 0.58 + ((pathNodeId-37)*0.1);
+                }
             } break;
             case 6:{ //6각형의 경우 //
                 if(pathNodeId==5 || pathNodeId==10 || pathNodeId==15 || pathNodeId==20){
