@@ -35,7 +35,7 @@ public class BoardPanel extends JPanel {
         double scale = Math.min(width, height) / 800.0;
         int baseNodeRadius = (int)(25 * scale);
         int crossNodeRadius = (int)(35 * scale);
-        int pieceRadius =  (int) (15 * scale);
+        int pieceRadius =  (int) (15 * scale); // 말의 반지름
 
         for (PathNode node : board.getPathNodes()) {
             if (!node.isVisible()) continue;
@@ -51,15 +51,16 @@ public class BoardPanel extends JPanel {
             g2.drawOval(x - baseNodeRadius, y - baseNodeRadius, baseNodeRadius * 2, baseNodeRadius * 2);
         }
 
+        // 말 그리기
         for(Piece[] player : piece){
             for(Piece eachP : player){
-                int x = (int) (board.getPathNodes()[eachP.getCurrentPathNodeId()].x_ratio * width - pieceRadius);
-                int y = (int) (board.getPathNodes()[eachP.getCurrentPathNodeId()].y_ratio * height - pieceRadius);
+                int x = (int) (board.getPathNodes()[eachP.getCurrentPathNodeId()].x_ratio * width - pieceRadius); //중심의 x좌표
+                int y = (int) (board.getPathNodes()[eachP.getCurrentPathNodeId()].y_ratio * height - pieceRadius); //중심의 y좌표
 
-                g2.setColor(PLAYER_COLORS[eachP.getPlayerId()]);
-                g2.fillOval(x, y, pieceRadius * 2, pieceRadius * 2);
+                g2.setColor(PLAYER_COLORS[eachP.getPlayerId()]); //말의 색 플레이어별로 다름
+                g2.fillOval(x, y, pieceRadius * 2, pieceRadius * 2); //말 그리기
 
-                if(eachP.selected){
+                if(eachP.selected){ //만약 움직이기 위해 선택된 말이라면 테두리를 두껍게 함
                     g2.setColor(Color.BLACK);
                     g2.setStroke(new BasicStroke(3));
                     g2.drawOval(x, y, pieceRadius * 2, pieceRadius * 2);
@@ -68,6 +69,7 @@ public class BoardPanel extends JPanel {
         }
     }
 
+    // 클릭 이벤트에서 말을 클릭했는지 확인하기 위한 함수
     boolean isContain(int px, int py, Piece p){
         int width = getWidth();
         int height = getHeight();
@@ -76,6 +78,6 @@ public class BoardPanel extends JPanel {
         int x = (int) (board.getPathNodes()[p.getCurrentPathNodeId()].x_ratio * width);
         int y = (int) (board.getPathNodes()[p.getCurrentPathNodeId()].y_ratio * height);
 
-        return Math.pow(px - x, 2) + Math.pow(py - y, 2) <= pieceRadius * pieceRadius;
+        return Math.pow(px - x, 2) + Math.pow(py - y, 2) <= pieceRadius * pieceRadius; // 거리가 반지름보다 작으면 true
     }
 }

@@ -92,11 +92,13 @@ public class GamePlayUI extends JFrame {
         rightPanel.add(playerInfoLabels[3]);
         add(rightPanel, BorderLayout.EAST);
 
+        // 마우스 클릭 이벤트
         addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
-                // 한 번에 하나만 선택되게
-                for (Piece p : gameManager.getGamePieces()[gameManager.getCurrentTurn()]) {
-                    if (boardPanel.isContain(e.getX(), e.getY(), p)) {
+                // 한 번에 하나만 선택되게 함
+                for (Piece p : gameManager.getGamePieces()[gameManager.getCurrentTurn()]) { // 현재 턴인 플레이어의 말만 검사함
+                    if (boardPanel.isContain(e.getX(), e.getY(), p)) { // 올바르게 말이 선택되었다면?
+                        // 전부 false로 바꾼 다음 선택된 말을 true로 바꿔서 한 번에 하나의 말만 선택할 수 있도록 한다
                         for (Piece eachP : gameManager.getGamePieces()[gameManager.getCurrentTurn()]){
                             p.selected = false;
                         }

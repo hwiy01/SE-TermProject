@@ -133,6 +133,7 @@ public class GameManager {
                 else{
                     isCaptureOrGroup(gamePieces[currentTurn][i].getCurrentPathNodeId());
                 }
+                gamePieces[currentTurn][i].selected = false; // 이동 후 선택 해제
             }
         }
     };
