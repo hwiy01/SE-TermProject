@@ -90,6 +90,7 @@ public class GamePlayUI extends JFrame {
                 showWinner(gameManager.getCurrentPlayer());
                 rollRandomButton.setEnabled(false);
                 rollSpecificButton.setEnabled(false);
+                showGameEndOptions();
             } else {
                 gameManager.nextTurn();
                 updateTurn(); // 현재 턴 표시 업데이트
@@ -125,6 +126,7 @@ public class GamePlayUI extends JFrame {
                 showWinner(gameManager.getCurrentPlayer());
                 rollRandomButton.setEnabled(false);
                 rollSpecificButton.setEnabled(false);
+                showGameEndOptions();
             } else {
                 gameManager.nextTurn();
                 updateTurn();
@@ -179,6 +181,31 @@ public class GamePlayUI extends JFrame {
             } else {
                 playerSlots[i].setVisible(false); // 참여하지 않는 플레이어 슬롯 숨기기
             }
+        }
+    }
+
+    private void showGameEndOptions() {
+        Object[] options = {"새 게임", "종료"};
+        int choice = JOptionPane.showOptionDialog(this,
+                "게임이 종료되었습니다. 다시 시작하시겠습니까?",
+                "게임 종료",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                options,
+                options[0]);
+
+        if (choice == JOptionPane.YES_OPTION) { // "새 게임" 선택
+            this.dispose(); // 현재 게임 창 닫기
+            javax.swing.SwingUtilities.invokeLater(() -> {
+                GameManager newGameManager = new GameManager();
+                new GameSetupUI(newGameManager);
+            });
+        } else if (choice == JOptionPane.NO_OPTION) { // "종료" 선택
+            System.exit(0);
+        } else {
+            // 사용자가 창을 그냥 닫은 경우 (아무것도 안 하거나 종료 처리)
+            System.exit(0);
         }
     }
 

@@ -52,21 +52,45 @@ public class BoardPanel extends JPanel {
         }
 
         // 말 그리기
-        for(Piece[] player : piece){
-            for(Piece eachP : player){
+        for(Piece[] playerPieces : piece){
+            for(Piece eachP : playerPieces){
                 int currentPathNodeId = eachP.getCurrentPathNodeId();
                 if (currentPathNodeId >= 0 && currentPathNodeId < board.getPathNodes().length) {
                     PathNode currentNode = board.getPathNodes()[currentPathNodeId];
-                    int x = (int) (currentNode.x_ratio * width - pieceRadius);
-                    int y = (int) (currentNode.y_ratio * height - pieceRadius);
 
+                    // 말의 중심 좌표 계산
+                    int pieceCenterX = (int) (currentNode.x_ratio * width);
+                    int pieceCenterY = (int) (currentNode.y_ratio * height);
+
+                    // 그릴 말의 실제 위치 (좌상단 기준)
+                    int drawX = pieceCenterX - pieceRadius;
+                    int drawY = pieceCenterY - pieceRadius;
                     g2.setColor(PLAYER_COLORS[eachP.getPlayerId() % PLAYER_COLORS.length]);
-                    g2.fillOval(x, y, pieceRadius * 2, pieceRadius * 2);
+                    g2.fillOval(drawX, drawY, pieceRadius * 2, pieceRadius * 2);
+
+                    // 업힌 말 개수 표시
+                    int groupedCount = eachP.getEachPieces().size();
+                    if (groupedCount > 1) {
+                        String countText = "x" + groupedCount;
+                        g2.setColor(Color.BLACK); // 숫자 색상
+                        Font currentFont = g2.getFont();
+                        Font newFont = currentFont.deriveFont(currentFont.getSize() * 0.8F);
+                        g2.setFont(newFont);
+
+                        // 숫자 위치를 말의 우측 상단 정도로 조정
+                        FontMetrics fm = g2.getFontMetrics();
+                        int textWidth = fm.stringWidth(countText);
+                        int textX = pieceCenterX + pieceRadius / 2; // 말의 중심에서 약간 오른쪽
+                        int textY = pieceCenterY - pieceRadius / 2; // 말의 중심에서 약간 위쪽
+
+                        g2.drawString(countText, textX, textY);
+                        g2.setFont(currentFont); // 폰트 원래대로 복구
+                    }
 
                     if(eachP.selected){ //만약 움직이기 위해 선택된 말이라면 테두리를 두껍게 함
                         g2.setColor(Color.BLACK);
                         g2.setStroke(new BasicStroke(3));
-                        g2.drawOval(x, y, pieceRadius * 2, pieceRadius * 2);
+                        g2.drawOval(drawX, drawY, pieceRadius * 2, pieceRadius * 2);
                     }
                 }
             }
