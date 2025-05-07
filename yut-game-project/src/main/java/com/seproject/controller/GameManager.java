@@ -110,14 +110,32 @@ public class GameManager {
         currentTurn = (currentTurn + 1) % numberOfPlayers;
     };
 
-//    public int processMove(int srcPathNodeId, int length) {
-//        //한마디로 srcPathNodeId에 있는 모든 말들을 length만큼 전진시키는 함수이다.
-//        /* 이 문단은 정의되지 않은 움직임에 관한 예외처리를 담고 있다. 현재 진영의 말을 선택했는지 꼭 확인해야 한다!! 만일 일치하지 않을 시 사용자가 잘못된 입력을 입력한 것으로 오류 코드인 -1을 반환한다. 그리고 즉시 프로세스를 종료한다. 예외 처리는 메인 함수에서 처리하도록 한다.
-//        이 문단은 업기의 특수한 예외 상황에 관한 추가적인 처리이다. srcPathNode이 0인지 확인한다. 0일시, 현재 윷을 던진 사람의 팀의 말 하나만 length에 대응하는 로케이 션 내의 어레이의 위치로 이동한다. 만일 이 기능이 제대로 구현되지 않았다면 시작 위치에 있는 말들이 싹 다 이동하는 별로 좋지 않은 일이 벌어질 것이다.
-//        예를 들면 도인 상황이라면 해당 위치의 말들이 possibleDoMove 해당 int 어레이의 내부 값으로 이동한다.
-//        그 후 iscaptureOrGroup을 호출하기 전, 골인했는지를 반드시 먼저 확인해야 한다. 그렇지 않으면 골인 지점이자 시작 지점인 위치에서 iscaptureOrGroup이 실행되어 게임 흐름이 뒤죽박죽이 될 수 도 있다. 만일 골인했다면, scoreup을 실행한 뒤, 함수를 종료한다.(return)
-//        processMove함수의 마지막 처리로 iscaptureOrGroup을 호출한다. 그렇게 하면 이론상 시작 위치를 제외한 다른 위치에서 다른 팀의 말끼리의 공존을 막을 수 있다.  */
-//    };
+    public void processMove(int srcPathNodeId, int length) {
+        //한마디로 srcPathNodeId에 있는 모든 말들을 length만큼 전진시키는 함수이다.
+        /* 이 문단은 정의되지 않은 움직임에 관한 예외처리를 담고 있다. 현재 진영의 말을 선택했는지 꼭 확인해야 한다!! 만일 일치하지 않을 시 사용자가 잘못된 입력을 입력한 것으로 오류 코드인 -1을 반환한다. 그리고 즉시 프로세스를 종료한다. 예외 처리는 메인 함수에서 처리하도록 한다.
+        이 문단은 업기의 특수한 예외 상황에 관한 추가적인 처리이다. srcPathNode이 0인지 확인한다. 0일시, 현재 윷을 던진 사람의 팀의 말 하나만 length에 대응하는 로케이 션 내의 어레이의 위치로 이동한다. 만일 이 기능이 제대로 구현되지 않았다면 시작 위치에 있는 말들이 싹 다 이동하는 별로 좋지 않은 일이 벌어질 것이다.
+        예를 들면 도인 상황이라면 해당 위치의 말들이 possibleDoMove 해당 int 어레이의 내부 값으로 이동한다.
+        그 후 iscaptureOrGroup을 호출하기 전, 골인했는지를 반드시 먼저 확인해야 한다. 그렇지 않으면 골인 지점이자 시작 지점인 위치에서 iscaptureOrGroup이 실행되어 게임 흐름이 뒤죽박죽이 될 수 도 있다. 만일 골인했다면, scoreup을 실행한 뒤, 함수를 종료한다.(return)
+        processMove함수의 마지막 처리로 iscaptureOrGroup을 호출한다. 그렇게 하면 이론상 시작 위치를 제외한 다른 위치에서 다른 팀의 말끼리의 공존을 막을 수 있다.  */
+        for(int i=0; i<numberOfPiecesForEachPlayer; i++){
+            if(gamePieces[currentTurn][i].getCurrentPathNodeId()==srcPathNodeId){
+                switch (length) {
+                    case 1: gamePieces[currentTurn][i].setPathNodeId(board.getPathNodes()[srcPathNodeId].getPossibleDoMove()); break;
+                    case 2: gamePieces[currentTurn][i].setPathNodeId(board.getPathNodes()[srcPathNodeId].getPossibleGaeMove()); break;
+                    case 3: gamePieces[currentTurn][i].setPathNodeId(board.getPathNodes()[srcPathNodeId].getPossibleGurlMove()); break;
+                    case 4: gamePieces[currentTurn][i].setPathNodeId(board.getPathNodes()[srcPathNodeId].getPossibleYutMove()); break;
+                    case 5: gamePieces[currentTurn][i].setPathNodeId(board.getPathNodes()[srcPathNodeId].getPossibleMoMove()); break;
+                    case -1: gamePieces[currentTurn][i].setPathNodeId(board.getPathNodes()[srcPathNodeId].getPossibleBackDoMove()); break;
+                }
+                if(gamePieces[currentTurn][i].getCurrentPathNodeId()==100){
+                    scoreUp(i);
+                }
+                else{
+                    isCaptureOrGroup(gamePieces[currentTurn][i].getCurrentPathNodeId());
+                }
+            }
+        }
+    };
 
     private int[] playerScores;
     public void scoreUp(int pieceId){
@@ -127,8 +145,9 @@ public class GameManager {
         int playerId = piece.getPlayerId();             // 말에 저장된 플레이어 ID
         int groupSize = piece.getEachPieces().size(); // 말에 업힌 개수
 
-        playerScores[playerId] += groupSize;
-        piece.setPathNodeId(-1);
+        //playerScores[playerId] += groupSize;
+        playerScores[playerId]+=1;
+        //piece.setPathNodeId(-1);
 
         System.out.println("Player " + players[playerId].getName() +
                 " scored " + groupSize + " point(s)!");
@@ -164,7 +183,7 @@ public class GameManager {
                 if (target.getCurrentPathNodeId() == srcNodeId) {
                     if (target.getPlayerId() != currentTurn) {
                         // 적군 말이면 잡기
-                        target.setPathNodeId(-5); // 상대 말 제거
+                        target.separatePieceGroup(); // 상대 말 제거
                         oneMoreChance = true;
                         System.out.println("Player " + currentTurn + " captured opponent piece!");
                     } else {

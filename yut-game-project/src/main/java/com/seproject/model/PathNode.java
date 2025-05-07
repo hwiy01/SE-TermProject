@@ -558,7 +558,7 @@ public class PathNode {
         return possibleMoMove;
     };
     public int getPossibleBackDoMove(){
-        return possibleMoMove;
+        return possibleBackDoMove;
     };
 
     private int inBranch;   //분기점(갈림길)인지 아닌지를 저장한다. 디폴트값은 0
