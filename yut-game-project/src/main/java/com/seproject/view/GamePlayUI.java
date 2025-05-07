@@ -100,7 +100,7 @@ public class GamePlayUI extends JFrame {
                     if (boardPanel.isContain(e.getX(), e.getY(), p)) { // 올바르게 말이 선택되었다면?
                         // 전부 false로 바꾼 다음 선택된 말을 true로 바꿔서 한 번에 하나의 말만 선택할 수 있도록 한다
                         for (Piece eachP : gameManager.getGamePieces()[gameManager.getCurrentTurn()]){
-                            p.selected = false;
+                            eachP.selected = false;
                         }
                         p.selected = true;
                         repaint();
