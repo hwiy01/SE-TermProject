@@ -10,6 +10,23 @@ import com.seproject.view.GamePlayUI;
 
 public class GameManager {
     public void playGame(){
+        if (this.numberOfPlayers > 0 && this.numberOfPiecesForEachPlayer > 0) {
+            // gamePieces 배열 생성
+            this.gamePieces = new Piece[this.numberOfPlayers][this.numberOfPiecesForEachPlayer];
+            // 각 Piece 객체 생성 및 초기화
+            for (int i = 0; i < this.numberOfPlayers; i++) {
+                for (int j = 0; j < this.numberOfPiecesForEachPlayer; j++) {
+                    this.gamePieces[i][j] = new Piece(j, i); // pieceId, playerId
+                }
+            }
+            System.out.println("[GameManager] gamePieces 초기화 완료: " + this.numberOfPlayers + "명의 플레이어, 각 " + this.numberOfPiecesForEachPlayer + "개의 말");
+
+            // playerScores 배열도 함께 초기화
+            this.playerScores = new int[this.numberOfPlayers];
+
+        } else {
+            System.err.println("[GameManager] 경고: 플레이어 수 또는 말 개수가 설정되지 않아 gamePieces 초기화 불가");
+        }
         this.gamePlayUI = new GamePlayUI(this); // 테스트용
         // 게임 플레이 로직
 

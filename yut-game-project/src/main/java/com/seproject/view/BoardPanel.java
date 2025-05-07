@@ -54,16 +54,20 @@ public class BoardPanel extends JPanel {
         // 말 그리기
         for(Piece[] player : piece){
             for(Piece eachP : player){
-                int x = (int) (board.getPathNodes()[eachP.getCurrentPathNodeId()].x_ratio * width - pieceRadius); //중심의 x좌표
-                int y = (int) (board.getPathNodes()[eachP.getCurrentPathNodeId()].y_ratio * height - pieceRadius); //중심의 y좌표
+                int currentPathNodeId = eachP.getCurrentPathNodeId();
+                if (currentPathNodeId >= 0 && currentPathNodeId < board.getPathNodes().length) {
+                    PathNode currentNode = board.getPathNodes()[currentPathNodeId];
+                    int x = (int) (currentNode.x_ratio * width - pieceRadius);
+                    int y = (int) (currentNode.y_ratio * height - pieceRadius);
 
-                g2.setColor(PLAYER_COLORS[eachP.getPlayerId()]); //말의 색 플레이어별로 다름
-                g2.fillOval(x, y, pieceRadius * 2, pieceRadius * 2); //말 그리기
+                    g2.setColor(PLAYER_COLORS[eachP.getPlayerId() % PLAYER_COLORS.length]);
+                    g2.fillOval(x, y, pieceRadius * 2, pieceRadius * 2);
 
-                if(eachP.selected){ //만약 움직이기 위해 선택된 말이라면 테두리를 두껍게 함
-                    g2.setColor(Color.BLACK);
-                    g2.setStroke(new BasicStroke(3));
-                    g2.drawOval(x, y, pieceRadius * 2, pieceRadius * 2);
+                    if(eachP.selected){ //만약 움직이기 위해 선택된 말이라면 테두리를 두껍게 함
+                        g2.setColor(Color.BLACK);
+                        g2.setStroke(new BasicStroke(3));
+                        g2.drawOval(x, y, pieceRadius * 2, pieceRadius * 2);
+                    }
                 }
             }
         }
