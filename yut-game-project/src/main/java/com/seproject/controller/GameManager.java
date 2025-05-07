@@ -164,13 +164,14 @@ public class GameManager {
                 if (target.getCurrentPathNodeId() == srcNodeId) {
                     if (target.getPlayerId() != currentTurn) {
                         // 적군 말이면 잡기
-                        target.setPathNodeId(-1); // 상대 말 제거
+                        target.setPathNodeId(-5); // 상대 말 제거
                         oneMoreChance = true;
                         System.out.println("Player " + currentTurn + " captured opponent piece!");
                     } else {
                         // 아군 말이면 업기
                         movedPiece.groupPiece(target);
-                        target.setPathNodeId(-1); // 기존 말을 비활성화
+                        target.groupPiece(movedPiece);
+                        //target.setPathNodeId(-1); // 기존 말을 비활성화
                         System.out.println("Player " + currentTurn + " grouped with own piece.");
                     }
                     return;

@@ -135,6 +135,21 @@ public class PathNode {
                     x_ratio = 0.25 + ((pathNodeId - 25) * 0.12);
                     y_ratio = 0.25 + ((pathNodeId - 25) * 0.12);
                 }
+                if(possibleDoMove>=30){
+                    possibleDoMove=100;
+                }
+                if(possibleGaeMove>=30){
+                    possibleGaeMove=100;
+                }
+                if(possibleGurlMove>=30){
+                    possibleGurlMove=100;
+                }
+                if(possibleYutMove>=30){
+                    possibleYutMove=100;
+                }
+                if(possibleMoMove>=30){
+                    possibleMoMove=100;
+                }
             } break;
             case 5:{ //오각형
                 if(pathNodeId==5 || pathNodeId==10 || pathNodeId==15){
@@ -293,6 +308,21 @@ public class PathNode {
                 else if(pathNodeId>=38 && pathNodeId<40){
                     x_ratio = 0.5 + ((pathNodeId-37)*0.08);
                     y_ratio = 0.58 + ((pathNodeId-37)*0.1);
+                }
+                if(possibleDoMove>=40){
+                    possibleDoMove=100;
+                }
+                if(possibleGaeMove>=40){
+                    possibleGaeMove=100;
+                }
+                if(possibleGurlMove>=40){
+                    possibleGurlMove=100;
+                }
+                if(possibleYutMove>=40){
+                    possibleYutMove=100;
+                }
+                if(possibleMoMove>=40){
+                    possibleMoMove=100;
                 }
             } break;
             case 6:{ //6각형의 경우 //
@@ -480,6 +510,21 @@ public class PathNode {
                 else if(pathNodeId>=48 && pathNodeId<50){
                     x_ratio = 0.5 + ((pathNodeId-47)*0.07);
                     y_ratio = 0.5 + ((pathNodeId-47)*0.13);
+                }
+                if(possibleDoMove>=50){
+                    possibleDoMove=100;
+                }
+                if(possibleGaeMove>=50){
+                    possibleGaeMove=100;
+                }
+                if(possibleGurlMove>=50){
+                    possibleGurlMove=100;
+                }
+                if(possibleYutMove>=50){
+                    possibleYutMove=100;
+                }
+                if(possibleMoMove>=50){
+                    possibleMoMove=100;
                 }
             }break;
         }
