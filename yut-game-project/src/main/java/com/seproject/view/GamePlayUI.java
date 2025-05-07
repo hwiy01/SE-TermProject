@@ -3,12 +3,14 @@ package com.seproject.view;
 import com.seproject.controller.GameManager;
 import com.seproject.enums.DiceResult;
 import com.seproject.model.Board;
+import com.seproject.model.Piece;
 import com.seproject.model.Player;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
 public class GamePlayUI extends JFrame {
@@ -39,7 +41,7 @@ public class GamePlayUI extends JFrame {
         add(topPanel, BorderLayout.NORTH);
 
         //보드 패널 생성 및 보드 배치
-        BoardPanel boardPanel = new BoardPanel(gameManager.getBoard());
+        BoardPanel boardPanel = new BoardPanel(gameManager.getBoard(), gameManager.getGamePieces());
         add(boardPanel, BorderLayout.CENTER);
 
         // 왼쪽 - 플레이어 정보 + 랜덤 윷 버튼
@@ -89,6 +91,22 @@ public class GamePlayUI extends JFrame {
         rightPanel.add(rollSpecificButton);
         rightPanel.add(playerInfoLabels[3]);
         add(rightPanel, BorderLayout.EAST);
+
+        addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                // 한 번에 하나만 선택되게
+                for (Piece p : gameManager.getGamePieces()[gameManager.getCurrentTurn()]) {
+                    if (boardPanel.isContain(e.getX(), e.getY(), p)) {
+                        for (Piece eachP : gameManager.getGamePieces()[gameManager.getCurrentTurn()]){
+                            p.selected = false;
+                        }
+                        p.selected = true;
+                        repaint();
+                        break;
+                    }
+                }
+            }
+        });
 
         updatePlayerInfo(); // 플레이어 정보 업데이트
         setVisible(true);
@@ -141,29 +159,4 @@ public class GamePlayUI extends JFrame {
 //    public int showWhichPieceToMove(){
 //        //게임 중에 무슨 말을 움직일 건지 입력받아 해당 말의 id를 반환한다. 실제로 가능한가는 gameManager안에서만 확인할 수 있다.
 //    };
-
-//    // 마우스 클릭 이벤트
-//    addMouseListener(new MouseAdapter() {
-//        public void mouseClicked(MouseEvent e) {
-//            int size = Math.min(getWidth(), getHeight());
-//
-//            // 한 번에 하나만 선택되게
-//            for (YutPiece piece : pieces) {
-//                if (piece.contains(e.getX(), e.getY(), size)) {
-//                    for (YutPiece p : pieces) p.selected = false;
-//                    piece.selected = true;
-//                    repaint();
-//                    break;
-//                }
-//            }
-//        }
-//    });
-//    // 마우스 클릭 여부 판단 패널의 사이즈를 바뀌면 말의 크기도 바뀌면서 마우스 선택 영역 조절됨
-//    public boolean contains(int mouseX, int mouseY, int panelSize) {
-//        int px = (int) (x * panelSize);
-//        int py = (int) (y * panelSize);
-//        int r = panelSize / 10;
-//
-//        return new Rectangle(px - r, py - r, 2 * r, 2 * r).contains(mouseX, mouseY);
-//    }
 }

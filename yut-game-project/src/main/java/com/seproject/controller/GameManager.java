@@ -298,4 +298,12 @@ public class GameManager {
     public Board getBoard() {
         return board;
     }
+
+    public Piece[][] getGamePieces() {
+        return gamePieces;
+    }
+
+    public int getCurrentTurn(){
+        return currentTurn;
+    }
 }
