@@ -47,7 +47,9 @@ public class Piece {
     }; //말을 업는 기능 Piece를 인자로 받아서 인자에 포함되어 있는 eachPiece를 전부 현재 객체의 pieces에 추가한다
     //양쪽 Piece 모두 eachPiece를 추가해서 동일한 정보의 객체를 2개 유지할것인지 한쪽에만 추가하고 다른 한쪽은 제거할것인지 고민 필요
     public void separatePieceGroup(){
-
+        pieces.clear();
+        pieces.add(new EachPiece(pieceId, playerId));
+        currentPathNodeId=-5;
     }; //piece를 분리하는 기능이 꼭 필요한가? 말이 잡혔을 경우 객체 자체를 제거하고 다시 출발할 때 piece 객체를 생성하면 어떨까?
 
     public int getCurrentPathNodeId() {
