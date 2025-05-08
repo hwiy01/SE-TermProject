@@ -169,7 +169,7 @@ public class GamePlayUI extends JFrame {
         add(rightPanel, BorderLayout.EAST);
 
         // 마우스 클릭 이벤트
-        addMouseListener(new MouseAdapter() {
+        boardPanel.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 if(!gameManager.getDiceResult().isEmpty()) { // 저장된 윷 결과가 존재해야 실행
                     // 한 번에 하나만 선택되게 함
