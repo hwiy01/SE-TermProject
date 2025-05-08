@@ -237,7 +237,7 @@ public class GamePlayUI extends JFrame {
         //윷을 던진 결과를 시각화한다.
         String diceResults = "";
         for(DiceResult d : result) {
-            diceResults = d.name() + " ";
+            diceResults = diceResults + d.name() + " ";
         }
         resultLabel.setText("윷 결과: " + diceResults);
     };

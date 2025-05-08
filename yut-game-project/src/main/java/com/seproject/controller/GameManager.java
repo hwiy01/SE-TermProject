@@ -71,7 +71,7 @@ public class GameManager {
 
     } //전체 게임 흐름을 담당하는 로직이다. main에서 호출될 예정이다. 승리자가 나올 때까지 아래의 함수들을 게임 흐름에 맞게 순차적으로 호출한다.
 
-    public void GameManager(Player[] currentPlayers, int numberOfPiecesForEachTeam, Board gameBoard) {
+    public GameManager() {
         //생성자이다. GameSetupUI에서 받아온 정보를 토대로 게임 매니저 내부의 players에 입력 받은 어레이를 복사하고, 팀 개수와 각 팀에서 사용할 게임 말의 개수를 내부 변수에 채워 넣는다.
         // GamePlayUI, Dice, Piece 객체 생성
         //this.players = currentPlayers;
@@ -80,7 +80,7 @@ public class GameManager {
         //this.board = gameBoard;
         this.currentTurn = 0;
         this.oneMoreChance = true;
-
+        this.currentDiceResult = new ArrayList<>();
         this.dice = new Dice[4];
         for (int i = 0; i < 4; i++) {
             dice[i] = new Dice();
@@ -120,10 +120,10 @@ public class GameManager {
         //currentTurn에 계속 1을 더해서 턴을 진행시킨다. 만일 oneMoreChance가 1일시 해당 bool값을 0으로 바꾸고 currentTurn값은 바뀌지 않는다.
         // (currentTurn + 1) % (player – 1)을 currentTurn에 넣고 return한다. 1을 빼는 이유는 인덱싱으로 일괄처리하도록 정했기 때문이다.
         // 다른 계산에서도 혹시 관련 연산을 수행해야 한다면 인덱싱으로 처리하는 것을 우선하기 바란다.
-        if (oneMoreChance) {
-            oneMoreChance = false;
-            return; // 한 번 더 기회가 있었던 경우, 턴 유지
-        }
+        //if (oneMoreChance) {
+        oneMoreChance = true;
+        //    return; // 한 번 더 기회가 있었던 경우, 턴 유지
+        //}
         currentTurn = (currentTurn + 1) % numberOfPlayers;
     };
 
