@@ -99,6 +99,9 @@ public class BoardPanel extends JPanel {
 
     // 클릭 이벤트에서 말을 클릭했는지 확인하기 위한 함수
     boolean isContain(int px, int py, Piece p){
+        if(p.getCurrentPathNodeId()==-5 || p.getCurrentPathNodeId()==100){
+            return false;
+        }
         int width = getWidth();
         int height = getHeight();
         double scale = Math.min(width, height) / 800.0;

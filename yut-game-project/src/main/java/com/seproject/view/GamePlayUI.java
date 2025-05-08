@@ -182,7 +182,10 @@ public class GamePlayUI extends JFrame {
                             p.selected = true;
                             repaint();
                             DiceResult result = selectMove();
-                            if(result==null) return;
+                            if(result==null) {
+                                p.selected = false;
+                                return;
+                            }
                             gameManager.processMove(p.getCurrentPathNodeId(), result.getMoveSteps());
                             showDiceResult(gameManager.getDiceResult());
                             if (gameManager.checkWinCondition()) {
