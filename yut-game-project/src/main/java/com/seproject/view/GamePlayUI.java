@@ -81,6 +81,7 @@ public class GamePlayUI extends JFrame {
             if(gameManager.getChance()) {
                 gameManager.rollDice();
                 showDiceResult(gameManager.getDiceResult());
+                gameManager.noChance();
                 // processMove 호출
                 // 예시: 사용자가 말을 선택하고 이동하는 로직이 여기에 들어간다고 가정
                 // if (말 이동이 성공적으로 완료되었다면) {
@@ -119,7 +120,9 @@ public class GamePlayUI extends JFrame {
             if(gameManager.getChance()) {
                 DiceResult result = selectDiceResult();
                 if (result == null) return; // 사용자가 선택 취소한 경우
+                gameManager.addSelectDiceResult(result);
                 showDiceResult(gameManager.getDiceResult());
+                gameManager.noChance();
                 // processMove 호출
                 // if (말 이동이 성공적으로 완료되었다면) {
                 //    updatePlayerAndWaitingPiecesInfo();
@@ -148,7 +151,7 @@ public class GamePlayUI extends JFrame {
         // 마우스 클릭 이벤트
         addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
-                if(gameManager.getDiceResult().size()!=0) {
+                if(!gameManager.getDiceResult().isEmpty()) { // 저장된 윷 결과가 존재해야 실행
                     // 한 번에 하나만 선택되게 함
                     for (Piece p : gameManager.getGamePieces()[gameManager.getCurrentTurn()]) { // 현재 턴인 플레이어의 말만 검사함
                         if (boardPanel.isContain(e.getX(), e.getY(), p)) { // 올바르게 말이 선택되었다면?

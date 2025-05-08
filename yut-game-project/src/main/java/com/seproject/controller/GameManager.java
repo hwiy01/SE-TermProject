@@ -79,7 +79,7 @@ public class GameManager {
         //this.numberOfPiecesForEachPlayer = numberOfPiecesForEachTeam;
         //this.board = gameBoard;
         this.currentTurn = 0;
-        this.oneMoreChance = false;
+        this.oneMoreChance = true;
 
         this.dice = new Dice[4];
         for (int i = 0; i < 4; i++) {
@@ -341,7 +341,15 @@ public class GameManager {
         return oneMoreChance;
     }
 
+    public void noChance(){
+        oneMoreChance = false;
+    }
+
     public ArrayList<DiceResult> getDiceResult() {
         return currentDiceResult;
+    }
+
+    public void addSelectDiceResult(DiceResult select){
+        currentDiceResult.add(select);
     }
 }
