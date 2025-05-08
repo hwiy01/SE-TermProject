@@ -43,4 +43,8 @@ public class WaitingPieceDisplayPanel extends JPanel {
             }
         }
     }
+
+    public int getWaitingPiecesCount(){
+        return waitingPiecesCount;
+    }
 }

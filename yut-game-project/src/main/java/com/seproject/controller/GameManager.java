@@ -134,6 +134,22 @@ public class GameManager {
         예를 들면 도인 상황이라면 해당 위치의 말들이 possibleDoMove 해당 int 어레이의 내부 값으로 이동한다.
         그 후 iscaptureOrGroup을 호출하기 전, 골인했는지를 반드시 먼저 확인해야 한다. 그렇지 않으면 골인 지점이자 시작 지점인 위치에서 iscaptureOrGroup이 실행되어 게임 흐름이 뒤죽박죽이 될 수 도 있다. 만일 골인했다면, scoreup을 실행한 뒤, 함수를 종료한다.(return)
         processMove함수의 마지막 처리로 iscaptureOrGroup을 호출한다. 그렇게 하면 이론상 시작 위치를 제외한 다른 위치에서 다른 팀의 말끼리의 공존을 막을 수 있다.  */
+        if(srcPathNodeId==-5){
+            for(int i=0; i<numberOfPiecesForEachPlayer; i++){
+                if(gamePieces[currentTurn][i].getCurrentPathNodeId()==-5){
+                    switch (length) {
+                        case 1: gamePieces[currentTurn][i].setPathNodeId(1); break;
+                        case 2: gamePieces[currentTurn][i].setPathNodeId(2); break;
+                        case 3: gamePieces[currentTurn][i].setPathNodeId(3); break;
+                        case 4: gamePieces[currentTurn][i].setPathNodeId(4); break;
+                        case 5: gamePieces[currentTurn][i].setPathNodeId(5); break;
+                        case -1: gamePieces[currentTurn][i].setPathNodeId(-5); break;
+                    }
+                    isCaptureOrGroup(gamePieces[currentTurn][i].getCurrentPathNodeId());
+                    return; // 출발하지 않은 말은 하나만 출발
+                }
+            }
+        }
         for(int i=0; i<numberOfPiecesForEachPlayer; i++){
             if(gamePieces[currentTurn][i].getCurrentPathNodeId()==srcPathNodeId){
                 switch (length) {
@@ -177,7 +193,7 @@ public class GameManager {
         // 방금 윷을 던진 팀을 추적하고, 해당 위치에 있는 다른 말이 상태 편 말이라면 상대편 말(들)의 위치를 0으로 바꾸고 oneMoreChance를 1로 바꾸고 return한다.
         // 이는 상대편 말이 잡혀서 시작 위치로 돌아간 것과 잡으면 한번 더 하는 것을 구현한 것이다.
         // 그게 아군의 말이라면 그 위치에 있는 모든 아군의 말들에 관한 업기 연산을 수행한다. 그 후return한다. (업기)’
-        if (srcNodeId==0) return; // 시작 위치에서는 겹침을 무시한다.
+        if (srcNodeId==-5) return; // 시작 위치에서는 겹침을 무시한다.
 
         Piece movedPiece=null; // 현재 턴에 이동한 자신의 말
 
@@ -211,7 +227,7 @@ public class GameManager {
                         //target.setPathNodeId(-1); // 기존 말을 비활성화
                         System.out.println("Player " + currentTurn + " grouped with own piece.");
                     }
-                    return;
+                    //return;
                 }
             }
         }
@@ -345,11 +361,19 @@ public class GameManager {
         oneMoreChance = false;
     }
 
+    public void moreChance(){
+        oneMoreChance = true;
+    }
+
     public ArrayList<DiceResult> getDiceResult() {
         return currentDiceResult;
     }
 
     public void addSelectDiceResult(DiceResult select){
         currentDiceResult.add(select);
+    }
+
+    public void deleteUsedDiceResult(DiceResult use){
+        currentDiceResult.remove(use);
     }
 }

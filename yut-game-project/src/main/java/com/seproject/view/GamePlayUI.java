@@ -3,6 +3,7 @@ package com.seproject.view;
 import com.seproject.controller.GameManager;
 import com.seproject.enums.DiceResult;
 import com.seproject.model.Board;
+import com.seproject.model.Dice;
 import com.seproject.model.Piece;
 import com.seproject.model.Player;
 
@@ -64,6 +65,39 @@ public class GamePlayUI extends JFrame {
 
             waitingPieceDisplays[i] = new WaitingPieceDisplayPanel(i);
             waitingPieceDisplays[i].setAlignmentX(Component.CENTER_ALIGNMENT);
+            int pID = i;
+            waitingPieceDisplays[i].addMouseListener(new MouseAdapter() {
+                public void mouseClicked(MouseEvent e){
+                    if(gameManager.getCurrentTurn() == pID && waitingPieceDisplays[pID].getWaitingPiecesCount() > 0){
+                        for(Piece p : gameManager.getGamePieces()[gameManager.getCurrentTurn()]){
+                            if(p.getCurrentPathNodeId() == -5){
+                                DiceResult result = selectMove();
+                                if(result==null) return;
+                                gameManager.processMove(p.getCurrentPathNodeId(), result.getMoveSteps());
+                                showDiceResult(gameManager.getDiceResult());
+
+                                if (gameManager.checkWinCondition()) {
+                                    showWinner(gameManager.getCurrentPlayer());
+                                    rollRandomButton.setEnabled(false);
+                                    rollSpecificButton.setEnabled(false);
+                                    showGameEndOptions();
+                                }
+                                if(!gameManager.getChance() && gameManager.getDiceResult().isEmpty()){
+                                    gameManager.nextTurn();
+                                    updateTurn();
+                                }
+                                for(int j=0; j<4; j++) {
+                                    waitingPieceDisplays[j].revalidate();
+                                    waitingPieceDisplays[j].repaint();
+                                }
+                                updatePlayerAndWaitingPiecesInfo();
+                                repaint();
+                                break;
+                            }
+                        }
+                    }
+                }
+            });
 
             playerSlots[i].add(playerInfoLabels[i]);
             playerSlots[i].add(Box.createRigidArea(new Dimension(0, 5)));
@@ -82,22 +116,14 @@ public class GamePlayUI extends JFrame {
                 gameManager.rollDice();
                 showDiceResult(gameManager.getDiceResult());
                 gameManager.noChance();
+                if(gameManager.getDiceResult().getLast().getMoveSteps()==4 || gameManager.getDiceResult().getLast().getMoveSteps()==5){
+                    gameManager.moreChance();
+                }
                 // processMove 호출
                 // 예시: 사용자가 말을 선택하고 이동하는 로직이 여기에 들어간다고 가정
                 // if (말 이동이 성공적으로 완료되었다면) {
                 //    updatePlayerAndWaitingPiecesInfo(); // 말 상태 변경 후 UI 업데이트
                 // }
-
-                if (gameManager.checkWinCondition()) {
-                    showWinner(gameManager.getCurrentPlayer());
-                    rollRandomButton.setEnabled(false);
-                    rollSpecificButton.setEnabled(false);
-                    showGameEndOptions();
-                } else {
-                    gameManager.nextTurn();
-                    updateTurn(); // 현재 턴 표시 업데이트
-                    updatePlayerAndWaitingPiecesInfo(); // 다음 턴 시작 시 대기 말 포함 전체 정보 업데이트
-                }
             }
         });
 
@@ -123,21 +149,15 @@ public class GamePlayUI extends JFrame {
                 gameManager.addSelectDiceResult(result);
                 showDiceResult(gameManager.getDiceResult());
                 gameManager.noChance();
+                if(gameManager.getDiceResult().getLast().getMoveSteps()==4 || gameManager.getDiceResult().getLast().getMoveSteps()==5){
+                    gameManager.moreChance();
+                }
                 // processMove 호출
                 // if (말 이동이 성공적으로 완료되었다면) {
                 //    updatePlayerAndWaitingPiecesInfo();
                 // }
 
-                if (gameManager.checkWinCondition()) {
-                    showWinner(gameManager.getCurrentPlayer());
-                    rollRandomButton.setEnabled(false);
-                    rollSpecificButton.setEnabled(false);
-                    showGameEndOptions();
-                } else {
-                    gameManager.nextTurn();
-                    updateTurn();
-                    updatePlayerAndWaitingPiecesInfo();
-                }
+
             }
         });
 
@@ -160,6 +180,23 @@ public class GamePlayUI extends JFrame {
                                 eachP.selected = false;
                             }
                             p.selected = true;
+                            repaint();
+                            DiceResult result = selectMove();
+                            if(result==null) return;
+                            gameManager.processMove(p.getCurrentPathNodeId(), result.getMoveSteps());
+                            showDiceResult(gameManager.getDiceResult());
+                            if (gameManager.checkWinCondition()) {
+                                showWinner(gameManager.getCurrentPlayer());
+                                rollRandomButton.setEnabled(false);
+                                rollSpecificButton.setEnabled(false);
+                                showGameEndOptions();
+                            }
+                            if(!gameManager.getChance() && gameManager.getDiceResult().isEmpty()){
+                                gameManager.nextTurn();
+                                updateTurn();
+                            }
+                            updatePlayerAndWaitingPiecesInfo();
+                            //revalidate();
                             repaint();
                             break;
                         }
@@ -241,6 +278,15 @@ public class GamePlayUI extends JFrame {
         }
         resultLabel.setText("윷 결과: " + diceResults);
     };
+
+    public DiceResult selectMove(){
+        DiceResult[] move = gameManager.getDiceResult().toArray(new DiceResult[0]);
+        DiceResult delete = (DiceResult) JOptionPane.showInputDialog(
+                this, "움직일 윷 결과를 선택하세요:", "윷 결과 선택",
+                JOptionPane.PLAIN_MESSAGE, null, move, move[0]); // 선택된 결과 또는 null 반환
+        gameManager.deleteUsedDiceResult(delete);
+        return delete;
+    }
 
     public void showWinner(Player player){
         //승리한 플레이어를(개인전이므로) 화면에 출력한다.
