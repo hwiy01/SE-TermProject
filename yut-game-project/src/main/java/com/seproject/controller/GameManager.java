@@ -8,6 +8,8 @@ import com.seproject.model.Player;
 import com.seproject.view.GameSetupUI;
 import com.seproject.view.GamePlayUI;
 
+import java.util.ArrayList;
+
 public class GameManager {
     public void playGame(){
         if (this.numberOfPlayers > 0 && this.numberOfPiecesForEachPlayer > 0) {
@@ -103,7 +105,7 @@ public class GameManager {
     private Dice[] dice;  //윷이다. // 길이 4 배열로 초기화
 
     //private DiceResult[] currentDiceResult;
-    private DiceResult currentDiceResult;
+    private ArrayList<DiceResult> currentDiceResult;
 
     private Piece[][] gamePieces;
     //private Piece[] gamePieces; //게임말들이다
@@ -238,7 +240,7 @@ public class GameManager {
     };
 
 
-    public DiceResult rollDice(){
+    public void rollDice(){
         //roll.Dice를 호출하여 랜덤 DiceResult 값 받아옴
         //Dice.rollDice는 ‘랜덤으로 던지기’ 기능을 수행하는 함수로, DiceResult를 정해진 비율에 따라 반환
 
@@ -251,19 +253,17 @@ public class GameManager {
 
         // 납작한 면이 1개만 나왔고, 납작한 면이 나온 윷이 첫번째 윷일 경우를 빽도로 판정함.
         if (count == 1 && result[0] == 1 && result[1] == 0 && result[2] == 0 && result[3] == 0) {
-            currentDiceResult = DiceResult.BACKDO;
+            currentDiceResult.add(DiceResult.BACKDO);
         } else {
             switch (count) {
-                case 0: currentDiceResult = DiceResult.MO; break;
-                case 1: currentDiceResult = DiceResult.DO; break;
-                case 2: currentDiceResult = DiceResult.GAE; break;
-                case 3: currentDiceResult = DiceResult.GEOL; break;
-                case 4: currentDiceResult = DiceResult.YUT; break;
+                case 0: currentDiceResult.add(DiceResult.MO); break;
+                case 1: currentDiceResult.add(DiceResult.DO); break;
+                case 2: currentDiceResult.add(DiceResult.GAE); break;
+                case 3: currentDiceResult.add(DiceResult.GEOL); break;
+                case 4: currentDiceResult.add(DiceResult.YUT); break;
                 default: throw new IllegalStateException("Unexpected dice count: " + count);
             }
         }
-
-        return currentDiceResult;
     }
 
     //플레이어의 수를 받아와서 저장한 후 Player 배열을 생성한다
