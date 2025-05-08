@@ -74,10 +74,10 @@ public class GameManager {
     public void GameManager(Player[] currentPlayers, int numberOfPiecesForEachTeam, Board gameBoard) {
         //생성자이다. GameSetupUI에서 받아온 정보를 토대로 게임 매니저 내부의 players에 입력 받은 어레이를 복사하고, 팀 개수와 각 팀에서 사용할 게임 말의 개수를 내부 변수에 채워 넣는다.
         // GamePlayUI, Dice, Piece 객체 생성
-        this.players = currentPlayers;
-        this.numberOfPlayers = currentPlayers.length;
-        this.numberOfPiecesForEachPlayer = numberOfPiecesForEachTeam;
-        this.board = gameBoard;
+        //this.players = currentPlayers;
+        //this.numberOfPlayers = currentPlayers.length;
+        //this.numberOfPiecesForEachPlayer = numberOfPiecesForEachTeam;
+        //this.board = gameBoard;
         this.currentTurn = 0;
         this.oneMoreChance = false;
 
@@ -335,5 +335,13 @@ public class GameManager {
             }
         }
         return count;
+    }
+
+    public boolean getChance(){
+        return oneMoreChance;
+    }
+
+    public ArrayList<DiceResult> getDiceResult() {
+        return currentDiceResult;
     }
 }

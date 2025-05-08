@@ -78,23 +78,25 @@ public class GamePlayUI extends JFrame {
         rollRandomButton = new JButton("랜덤 윷 던지기");
         rollRandomButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         rollRandomButton.addActionListener((ActionEvent e) -> {
-            DiceResult result = gameManager.rollDice();
-            showDiceResult(result);
-            // processMove 호출
-            // 예시: 사용자가 말을 선택하고 이동하는 로직이 여기에 들어간다고 가정
-            // if (말 이동이 성공적으로 완료되었다면) {
-            //    updatePlayerAndWaitingPiecesInfo(); // 말 상태 변경 후 UI 업데이트
-            // }
+            if(gameManager.getChance()) {
+                gameManager.rollDice();
+                showDiceResult(gameManager.getDiceResult());
+                // processMove 호출
+                // 예시: 사용자가 말을 선택하고 이동하는 로직이 여기에 들어간다고 가정
+                // if (말 이동이 성공적으로 완료되었다면) {
+                //    updatePlayerAndWaitingPiecesInfo(); // 말 상태 변경 후 UI 업데이트
+                // }
 
-            if (gameManager.checkWinCondition()) {
-                showWinner(gameManager.getCurrentPlayer());
-                rollRandomButton.setEnabled(false);
-                rollSpecificButton.setEnabled(false);
-                showGameEndOptions();
-            } else {
-                gameManager.nextTurn();
-                updateTurn(); // 현재 턴 표시 업데이트
-                updatePlayerAndWaitingPiecesInfo(); // 다음 턴 시작 시 대기 말 포함 전체 정보 업데이트
+                if (gameManager.checkWinCondition()) {
+                    showWinner(gameManager.getCurrentPlayer());
+                    rollRandomButton.setEnabled(false);
+                    rollSpecificButton.setEnabled(false);
+                    showGameEndOptions();
+                } else {
+                    gameManager.nextTurn();
+                    updateTurn(); // 현재 턴 표시 업데이트
+                    updatePlayerAndWaitingPiecesInfo(); // 다음 턴 시작 시 대기 말 포함 전체 정보 업데이트
+                }
             }
         });
 
@@ -114,23 +116,25 @@ public class GamePlayUI extends JFrame {
         rollSpecificButton = new JButton("지정 윷 던지기");
         rollSpecificButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         rollSpecificButton.addActionListener((ActionEvent e) -> {
-            DiceResult result = selectDiceResult();
-            if (result == null) return; // 사용자가 선택 취소한 경우
-            showDiceResult(result);
-            // processMove 호출
-            // if (말 이동이 성공적으로 완료되었다면) {
-            //    updatePlayerAndWaitingPiecesInfo();
-            // }
+            if(gameManager.getChance()) {
+                DiceResult result = selectDiceResult();
+                if (result == null) return; // 사용자가 선택 취소한 경우
+                showDiceResult(gameManager.getDiceResult());
+                // processMove 호출
+                // if (말 이동이 성공적으로 완료되었다면) {
+                //    updatePlayerAndWaitingPiecesInfo();
+                // }
 
-            if (gameManager.checkWinCondition()) {
-                showWinner(gameManager.getCurrentPlayer());
-                rollRandomButton.setEnabled(false);
-                rollSpecificButton.setEnabled(false);
-                showGameEndOptions();
-            } else {
-                gameManager.nextTurn();
-                updateTurn();
-                updatePlayerAndWaitingPiecesInfo();
+                if (gameManager.checkWinCondition()) {
+                    showWinner(gameManager.getCurrentPlayer());
+                    rollRandomButton.setEnabled(false);
+                    rollSpecificButton.setEnabled(false);
+                    showGameEndOptions();
+                } else {
+                    gameManager.nextTurn();
+                    updateTurn();
+                    updatePlayerAndWaitingPiecesInfo();
+                }
             }
         });
 
@@ -144,16 +148,18 @@ public class GamePlayUI extends JFrame {
         // 마우스 클릭 이벤트
         addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
-                // 한 번에 하나만 선택되게 함
-                for (Piece p : gameManager.getGamePieces()[gameManager.getCurrentTurn()]) { // 현재 턴인 플레이어의 말만 검사함
-                    if (boardPanel.isContain(e.getX(), e.getY(), p)) { // 올바르게 말이 선택되었다면?
-                        // 전부 false로 바꾼 다음 선택된 말을 true로 바꿔서 한 번에 하나의 말만 선택할 수 있도록 한다
-                        for (Piece eachP : gameManager.getGamePieces()[gameManager.getCurrentTurn()]){
-                            eachP.selected = false;
+                if(gameManager.getDiceResult().size()!=0) {
+                    // 한 번에 하나만 선택되게 함
+                    for (Piece p : gameManager.getGamePieces()[gameManager.getCurrentTurn()]) { // 현재 턴인 플레이어의 말만 검사함
+                        if (boardPanel.isContain(e.getX(), e.getY(), p)) { // 올바르게 말이 선택되었다면?
+                            // 전부 false로 바꾼 다음 선택된 말을 true로 바꿔서 한 번에 하나의 말만 선택할 수 있도록 한다
+                            for (Piece eachP : gameManager.getGamePieces()[gameManager.getCurrentTurn()]) {
+                                eachP.selected = false;
+                            }
+                            p.selected = true;
+                            repaint();
+                            break;
                         }
-                        p.selected = true;
-                        repaint();
-                        break;
                     }
                 }
             }
@@ -224,9 +230,13 @@ public class GamePlayUI extends JFrame {
                 JOptionPane.PLAIN_MESSAGE, null, values, values[0]); // 선택된 결과 또는 null 반환
     }
 
-    public void showDiceResult(DiceResult result){
+    public void showDiceResult(ArrayList<DiceResult> result){
         //윷을 던진 결과를 시각화한다.
-        resultLabel.setText("윷 결과: " + result.name());
+        String diceResults = "";
+        for(DiceResult d : result) {
+            diceResults = d.name() + " ";
+        }
+        resultLabel.setText("윷 결과: " + diceResults);
     };
 
     public void showWinner(Player player){
