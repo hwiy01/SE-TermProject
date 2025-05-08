@@ -69,6 +69,9 @@ public class GamePlayUI extends JFrame {
             waitingPieceDisplays[i].addMouseListener(new MouseAdapter() {
                 public void mouseClicked(MouseEvent e){
                     if(gameManager.getCurrentTurn() == pID && waitingPieceDisplays[pID].getWaitingPiecesCount() > 0){
+                        if(gameManager.onlyBackDo()){
+                            return;
+                        }
                         for(Piece p : gameManager.getGamePieces()[gameManager.getCurrentTurn()]){
                             if(p.getCurrentPathNodeId() == -5){
                                 DiceResult result = selectMove();
@@ -91,6 +94,7 @@ public class GamePlayUI extends JFrame {
                                     waitingPieceDisplays[j].repaint();
                                 }
                                 updatePlayerAndWaitingPiecesInfo();
+                                revalidate();
                                 repaint();
                                 break;
                             }
@@ -118,6 +122,32 @@ public class GamePlayUI extends JFrame {
                 gameManager.noChance();
                 if(gameManager.getDiceResult().getLast().getMoveSteps()==4 || gameManager.getDiceResult().getLast().getMoveSteps()==5){
                     gameManager.moreChance();
+                }
+                if(gameManager.onlyBackDo() && !gameManager.getChance()){ // 뺵도밖에 없고 윷 던지는 기회가 없는데 판 위에 말이 없으면 다음턴
+                    for(int i=0; i<gameManager.getNumberOfPiecesPerPlayer(); i++){
+                        if(gameManager.getGamePieces()[gameManager.getCurrentTurn()][i].getCurrentPathNodeId()!=-5){
+
+                            return;
+                        }
+                    }
+                    JOptionPane optionPane = new JOptionPane("빽도만 있어 현재 움직일 수 있는 말이 없으므로 다음 턴으로 넘어갑니다", JOptionPane.INFORMATION_MESSAGE);
+                    JDialog dialog = optionPane.createDialog(this, "알림");
+                    dialog.setModal(false);
+                    dialog.setVisible(true);
+
+                    new java.util.Timer().schedule(new java.util.TimerTask() {
+                        @Override
+                        public void run() {
+                            dialog.setVisible(false);
+                            dialog.dispose();
+                        }
+                    }, 3000);
+                    gameManager.getDiceResult().clear();
+                    gameManager.nextTurn();
+                    showDiceResult(gameManager.getDiceResult());
+                    updateTurn();
+                    revalidate();
+                    repaint();
                 }
                 // processMove 호출
                 // 예시: 사용자가 말을 선택하고 이동하는 로직이 여기에 들어간다고 가정
@@ -151,6 +181,32 @@ public class GamePlayUI extends JFrame {
                 gameManager.noChance();
                 if(gameManager.getDiceResult().getLast().getMoveSteps()==4 || gameManager.getDiceResult().getLast().getMoveSteps()==5){
                     gameManager.moreChance();
+                }
+                if(gameManager.onlyBackDo() && !gameManager.getChance()){ // 뺵도밖에 없고 윷 던지는 기회가 없는데 판 위에 말이 없으면 다음턴
+                    for(int i=0; i<gameManager.getNumberOfPiecesPerPlayer(); i++){
+                        if(gameManager.getGamePieces()[gameManager.getCurrentTurn()][i].getCurrentPathNodeId()!=-5){
+
+                            return;
+                        }
+                    }
+                    JOptionPane optionPane = new JOptionPane("빽도만 있어 현재 움직일 수 있는 말이 없으므로 다음 턴으로 넘어갑니다", JOptionPane.INFORMATION_MESSAGE);
+                    JDialog dialog = optionPane.createDialog(null, "알림");
+                    dialog.setModal(false);
+                    dialog.setVisible(true);
+
+                    new java.util.Timer().schedule(new java.util.TimerTask() {
+                        @Override
+                        public void run() {
+                            dialog.setVisible(false);
+                            dialog.dispose();
+                        }
+                    }, 3000);
+                    gameManager.getDiceResult().clear();
+                    gameManager.nextTurn();
+                    showDiceResult(gameManager.getDiceResult());
+                    updateTurn();
+                    revalidate();
+                    repaint();
                 }
                 // processMove 호출
                 // if (말 이동이 성공적으로 완료되었다면) {
@@ -199,7 +255,7 @@ public class GamePlayUI extends JFrame {
                                 updateTurn();
                             }
                             updatePlayerAndWaitingPiecesInfo();
-                            //revalidate();
+                            revalidate();
                             repaint();
                             break;
                         }

@@ -224,6 +224,8 @@ public class GameManager {
                         // 아군 말이면 업기
                         movedPiece.groupPiece(target);
                         target.groupPiece(movedPiece);
+                        System.out.print(movedPiece.getEachPieces().size());
+                        System.out.print(target.getEachPieces().size());
                         //target.setPathNodeId(-1); // 기존 말을 비활성화
                         System.out.println("Player " + currentTurn + " grouped with own piece.");
                     }
@@ -375,5 +377,14 @@ public class GameManager {
 
     public void deleteUsedDiceResult(DiceResult use){
         currentDiceResult.remove(use);
+    }
+
+    public boolean onlyBackDo(){
+        for (DiceResult diceResult : currentDiceResult) {
+            if (diceResult.getMoveSteps() != -1) {
+                return false;
+            }
+        }
+        return true;
     }
 }
