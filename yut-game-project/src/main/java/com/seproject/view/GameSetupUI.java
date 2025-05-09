@@ -86,6 +86,12 @@ public class GameSetupUI extends JFrame {
                 gameManager.setBoard(6);
             }
             //이름 입력 창 띄우고 입력받은 이름을 gamemanager에 있는 player들의 이름에 저장한다
+            String[] names = showNicknameInput((Integer)playerCombo.getSelectedItem());
+            for(String name : names){
+                if(name==null){
+                    return;
+                }
+            }
             gameManager.setPlayerName(showNicknameInput((Integer)playerCombo.getSelectedItem()));
             gameManager.playGame();
         });
@@ -152,13 +158,14 @@ public class GameSetupUI extends JFrame {
             }
 
             subFrame.dispose(); //서브 창 제거
+            this.dispose(); //메인 창 제거 -> 다음 단계로 넘어간다 (게임 실행 단계)
+
         });
         subFrame.add(name, BorderLayout.CENTER);
         subFrame.add(start, BorderLayout.SOUTH);
         subFrame.pack();
         subFrame.setLocationRelativeTo(this);
         subFrame.setVisible(true);
-        this.dispose(); //메인 창 제거 -> 다음 단계로 넘어간다 (게임 실행 단계)
         return names; //입력된 이름을 반환한다
     };
 }
