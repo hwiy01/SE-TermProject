@@ -23,6 +23,7 @@ public class GamePlayUI extends JFrame {
     private GameManager gameManager;
     private WaitingPieceDisplayPanel[] waitingPieceDisplays; // 새로 추가될 필드
     private JPanel[] playerSlots; // 플레이어 정보와 대기 말을 함께 담을 패널 배열
+    private JLabel instructionLabel; // 안내 텍스트 레이블 추가
     private static final Color[] PLAYER_COLORS = {
             Color.RED, Color.BLUE, Color.GREEN, Color.ORANGE
     };
@@ -37,7 +38,13 @@ public class GamePlayUI extends JFrame {
         setLayout(new BorderLayout());
 
         // 상단 패널 생성 ( 현재 턴, 윷 던지기 결과 표시 )
-        JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.CENTER,30,10));
+        JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT,30,10));
+
+        // 안내 텍스트 레이블 생성 및 설정
+        instructionLabel = new JLabel("실행 방법 : 윷 던지기 -> 자신의 말 마우스 클릭");
+        instructionLabel.setFont(new Font("맑은고딕", Font.BOLD, 16)); // 폰트 및 크기 설정 (필요에 따라 조절)
+        topPanel.add(instructionLabel); // 안내 텍스트 레이블을 가장 먼저 추가
+
         turnLabel = new JLabel("현재 턴: " + gameManager.getCurrentTurnName());
         turnLabel.setFont(new Font("맑은고딕", Font.BOLD, 20));
         resultLabel = new JLabel("윷 던지기 결과: ");
@@ -130,7 +137,7 @@ public class GamePlayUI extends JFrame {
                             return;
                         }
                     }
-                    JOptionPane optionPane = new JOptionPane("빽도만 있어 현재 움직일 수 있는 말이 없으므로 다음 턴으로 넘어갑니다", JOptionPane.INFORMATION_MESSAGE);
+                    JOptionPane optionPane = new JOptionPane("빽도! 현재 말판 위에 움직일 수 있는 말이 없으므로 다음 턴으로 넘어갑니다", JOptionPane.INFORMATION_MESSAGE);
                     JDialog dialog = optionPane.createDialog(this, "알림");
                     dialog.setModal(false);
                     dialog.setVisible(true);
@@ -271,15 +278,15 @@ public class GamePlayUI extends JFrame {
     public void updatePlayerAndWaitingPiecesInfo() {
         int numPlayers = gameManager.getNumberOfPlayers();
         int piecesPerPlayer = gameManager.getNumberOfPiecesPerPlayer(); // 총 말 개수
-
+        
         for (int i = 0; i < 4; i++) { // 최대 4개 슬롯
             if (i < numPlayers) {
                 String name = gameManager.getPlayerName(i);
                 int waitingCount = gameManager.getNumberOfWaitingPieces(i); // 대기 중인 말 개수 가져오기
-
+                int score= gameManager.getPlayerScore(i);
                 playerInfoLabels[i].setText("<html><div style='text-align: center;'>" +
                         "이름: " + name + "<br>" +
-                        "총 말: " + piecesPerPlayer +
+                        "득점: " + score +
                         "</div></html>");
                 waitingPieceDisplays[i].updateWaitingPieces(waitingCount); // 대기 말 개수 업데이트하여 다시 그리기
                 playerSlots[i].setVisible(true); // 해당 플레이어 슬롯 보이기

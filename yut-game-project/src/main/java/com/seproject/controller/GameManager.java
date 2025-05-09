@@ -237,26 +237,40 @@ public class GameManager {
         //그리고 isCapturedOrGrouped 기능이 넘 커지는 것 같아서 이 함수는 겹치는지 비교만하고, 잡거나 그룹화 하는 코드는 분리해서 함수로 만드는 거 어때요? -> iscapturedOrGrouped는 그냥 위치에 있는 말 조회해서 겹치는게 있나 있다면 상대편거가 섞여있나 섞여있다고? 너 시작위치로! 아니라고? 그냥 grouped1로 바꾸고 리턴
     };
 
+//    public boolean checkWinCondition(){
+//        // 매 턴이 끝날 때마다 호출된다.
+//        // 만일 한 팀의 모든 말이 필드에 존재하지 않을 경우(모든 말의 위치가 -1), 게임은 끝나고,
+//        // 그 팀(개인전이므로 해당 플레이어가 된다)이 승리한다. 어느 팀(개인전이므로 해당 플레이어가 된다)도 그 조건을 만족시키지 못할 경우 게임은 계속된다.
+//        for (int i = 0; i < numberOfPlayers; i++) {
+//            boolean allOut = true;
+//            for (int j = 0; j < numberOfPiecesForEachPlayer; j++) {
+//                if (gamePieces[i][j].getCurrentPathNodeId() != -1) {
+//                    allOut = false;
+//                    break;
+//                }
+//            }
+//            if (allOut) {
+//                System.out.println("Player " + players[i].getName() + "win!");
+//                return true;
+//            }
+//        }
+//        return false;
+//    };
+
     public boolean checkWinCondition(){
         // 매 턴이 끝날 때마다 호출된다.
-        // 만일 한 팀의 모든 말이 필드에 존재하지 않을 경우(모든 말의 위치가 -1), 게임은 끝나고,
-        // 그 팀(개인전이므로 해당 플레이어가 된다)이 승리한다. 어느 팀(개인전이므로 해당 플레이어가 된다)도 그 조건을 만족시키지 못할 경우 게임은 계속된다.
+        // 플레이어의 점수가 총 말의 수와 같아지면 해당 플레이어가 승리한다.
         for (int i = 0; i < numberOfPlayers; i++) {
-            boolean allOut = true;
-            for (int j = 0; j < numberOfPiecesForEachPlayer; j++) {
-                if (gamePieces[i][j].getCurrentPathNodeId() != -1) {
-                    allOut = false;
-                    break;
+            if (playerScores != null && i < playerScores.length &&
+                    players != null && i < players.length && players[i] != null) {
+                if (playerScores[i] == numberOfPiecesForEachPlayer) {
+                    System.out.println("Player " + players[i].getName() + " wins! All " + numberOfPiecesForEachPlayer + " pieces scored.");
+                    return true;
                 }
-            }
-            if (allOut) {
-                System.out.println("Player " + players[i].getName() + "win!");
-                return true;
             }
         }
         return false;
-    };
-
+    }
 
     public void rollDice(){
         //roll.Dice를 호출하여 랜덤 DiceResult 값 받아옴

@@ -72,19 +72,38 @@ public class BoardPanel extends JPanel {
                     int groupedCount = eachP.getEachPieces().size();
                     if (groupedCount > 1) {
                         String countText = "x" + groupedCount;
-                        g2.setColor(Color.BLACK); // 숫자 색상
+
                         Font currentFont = g2.getFont();
-                        Font newFont = currentFont.deriveFont(currentFont.getSize() * 0.8F);
+                        Font newFont = currentFont.deriveFont(Font.BOLD, currentFont.getSize() * 1.0F);
                         g2.setFont(newFont);
 
-                        // 숫자 위치를 말의 우측 상단 정도로 조정
                         FontMetrics fm = g2.getFontMetrics();
                         int textWidth = fm.stringWidth(countText);
-                        int textX = pieceCenterX + pieceRadius / 2; // 말의 중심에서 약간 오른쪽
-                        int textY = pieceCenterY - pieceRadius / 2; // 말의 중심에서 약간 위쪽
+                        int textHeight = fm.getHeight(); // 전체 텍스트 높이 (ascent + descent + leading)
+                        int textAscent = fm.getAscent(); // 베이스라인으로부터 텍스트 상단까지의 높이
 
-                        g2.drawString(countText, textX, textY);
-                        g2.setFont(currentFont); // 폰트 원래대로 복구
+                        // 텍스트 위치 계산 (drawString의 y좌표는 베이스라인 기준)
+                        int textBaselineX = pieceCenterX + pieceRadius / 3;
+                        int textBaselineY = pieceCenterY - pieceRadius / 2 + textAscent / 2 - (int) (3*scale);
+
+                        // 배경 사각형을 위한 패딩
+                        int padding = 1; // 2픽셀 패딩
+
+                        // 배경 사각형 좌표 및 크기 계산
+                        int bgX = textBaselineX - padding;
+                        int bgY = textBaselineY - textAscent - padding; // 텍스트 상단에서 패딩만큼 위로
+                        int bgWidth = textWidth + (2 * padding);
+                        int bgHeight = textHeight + (2 * padding); // ascent + descent + leading 을 포함한 높이에 패딩
+
+                        g2.setColor(Color.BLACK);
+                        g2.fillRoundRect(bgX, bgY, bgWidth, bgHeight, 5, 5);
+
+
+                        // 숫자 색상 설정 및 그리기
+                        g2.setColor(Color.WHITE);
+                        g2.drawString(countText, textBaselineX, textBaselineY);
+
+                        g2.setFont(currentFont);
                     }
 
                     if(eachP.selected){ //만약 움직이기 위해 선택된 말이라면 테두리를 두껍게 함
