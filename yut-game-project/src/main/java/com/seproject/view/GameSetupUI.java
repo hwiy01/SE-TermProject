@@ -92,7 +92,7 @@ public class GameSetupUI extends JFrame {
                     return;
                 }
             }
-            gameManager.setPlayerName(showNicknameInput((Integer)playerCombo.getSelectedItem()));
+            gameManager.setPlayerName(names);
             gameManager.playGame();
         });
 
@@ -156,7 +156,6 @@ public class GameSetupUI extends JFrame {
                 names[i] = field.getText().trim(); //문제 없으면 입력된 이름을 배열에 저장
                 i++;
             }
-
             subFrame.dispose(); //서브 창 제거
             this.dispose(); //메인 창 제거 -> 다음 단계로 넘어간다 (게임 실행 단계)
 
