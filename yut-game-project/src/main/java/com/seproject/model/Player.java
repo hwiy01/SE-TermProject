@@ -2,7 +2,7 @@ package com.seproject.model;
 
 public class Player {
     public Player(String nickname, int playerId){
-        //닉네임을 이용해 플레이어 클래스를 생성한다. 팀 번호는 더 이상 의미가 없으므로 인자로 받지 않는다.
+        //닉네임을 이용해 플레이어 클래스를 생성한다.
         this.name=nickname; //입력 받은 이름 설정
         this.playerId=playerId;
     };

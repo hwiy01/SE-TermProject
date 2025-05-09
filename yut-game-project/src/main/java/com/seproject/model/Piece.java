@@ -31,6 +31,8 @@ public class Piece {
     public ArrayList<EachPiece> getEachPieces(){
         return pieces;
     }; // 이 그룹에 포함된 말들을 반환하는 getter
+
+    //말을 업는 기능 Piece를 인자로 받아서 인자에 포함되어 있는 eachPiece를 전부 현재 객체의 pieces에 추가한다
     public void groupPiece(Piece group){
         for(EachPiece piece : group.getEachPieces()){
             boolean dupl=false;
@@ -44,8 +46,9 @@ public class Piece {
                 pieces.add(piece);
             }
         }
-    }; //말을 업는 기능 Piece를 인자로 받아서 인자에 포함되어 있는 eachPiece를 전부 현재 객체의 pieces에 추가한다
-    //양쪽 Piece 모두 eachPiece를 추가해서 동일한 정보의 객체를 2개 유지할것인지 한쪽에만 추가하고 다른 한쪽은 제거할것인지 고민 필요
+    };
+
+    //말이 잡혔을 경우 업은 말 정보를 제거하고 다시 개별 말로 분리한다
     public void separatePieceGroup(){
         pieces.clear();
         pieces.add(new EachPiece(pieceId, playerId));

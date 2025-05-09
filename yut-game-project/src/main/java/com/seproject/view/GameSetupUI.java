@@ -107,18 +107,6 @@ public class GameSetupUI extends JFrame {
     public void showMainMenu(){
         //메인 메뉴를 보여준다.
     };
-
-//    public int showNumberOfPiecesInEachPlayerChoice(){
-//        //각각의 플레이어가 몇 개의 말을 사용할 것인지 사용자에게서 입력받는다.
-//    }
-//
-//    public int showNumberOfPlayersChoice(){
-//        //플레이어가 몇명할지 선택하도록 창을 띄우고 입력받는다
-//    };
-//
-//    public int showBoardShapeChoice(){
-//        //게임 보드를 선택하도록 창을 띄우고 입력받는다
-//    };
     
     //이름 입력 창
     public String[] showNicknameInput(int numberOfPlayer){

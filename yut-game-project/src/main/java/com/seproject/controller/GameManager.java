@@ -28,56 +28,10 @@ public class GameManager {
 
         }
         this.gamePlayUI = new GamePlayUI(this); // 테스트용
-        // 게임 플레이 로직
-
-        // 1.
-        // rollDice 호출
-        // UI) GamePlayUI의 showDiceResult 호출
-
-        // 2.
-        // UI) selectDiceChoice 호출
-        // 랜덤 / 지정 윷던지기 중 선택하도록
-
-        // 2-1. 랜덤 윷던지기 경우
-        // rollDice 호출 ()
-        // currentDiceResult에 값 저장
-
-        // 2-2. 지정 윷던지기 경우
-        // UI) selectDiceResult 호출
-        // currentDiceResult[]에 값 저장
-
-
-        // 3.
-        // UI) showDiceResult 호출 윷던지기 결과 보여줌
-
-
-        // 윷을 던지고, 말을 움직이는 로직
-        // 4. processMove 함수 호출
-        //
-
-        // 5. isCaptureOrGroup 함수 호출
-        //
-
-        // 6. scoreUp 함수 호출
-        // UI) updateScore()
-
-        // 7. 이겼는지 확인
-        // checkwinCondition 호출, true 일때 종료 프로세스 실행
-
-
-        // 8. nextTurn 함수 호출
-        // UI) showCurrentTurn
-
-
     } //전체 게임 흐름을 담당하는 로직이다. main에서 호출될 예정이다. 승리자가 나올 때까지 아래의 함수들을 게임 흐름에 맞게 순차적으로 호출한다.
 
     public GameManager() {
         //생성자이다. GameSetupUI에서 받아온 정보를 토대로 게임 매니저 내부의 players에 입력 받은 어레이를 복사하고, 팀 개수와 각 팀에서 사용할 게임 말의 개수를 내부 변수에 채워 넣는다.
-        // GamePlayUI, Dice, Piece 객체 생성
-        //this.players = currentPlayers;
-        //this.numberOfPlayers = currentPlayers.length;
-        //this.numberOfPiecesForEachPlayer = numberOfPiecesForEachTeam;
-        //this.board = gameBoard;
         this.currentTurn = 0;
         this.oneMoreChance = true;
         this.currentDiceResult = new ArrayList<>();
@@ -86,6 +40,7 @@ public class GameManager {
             dice[i] = new Dice();
         }
 
+        //게임 말 정보 저장
         gamePieces = new Piece[numberOfPlayers][numberOfPiecesForEachPlayer];
         for (int i = 0; i < numberOfPlayers; i++) {
             for (int j = 0; j < numberOfPiecesForEachPlayer; j++) {
@@ -115,26 +70,16 @@ public class GameManager {
     //현재 누구의 턴인지 보여준다. 윷놀이는 참가자들이 한명씩 번갈아가면서 윷을 던지므로 범위는 0 ~ length(players) – 1이다. 그런 식으로 진행한다면 현재 윷을 던질 사람은 players[currentTurn]이 된다. 이렇게 게임 흐름에 따라 유연하게 계산하기 위한 내부 변수이다.
 
     private boolean oneMoreChance;
-    //잡았을 시 set된다. 잡고 한 턴 더 하는 것을 위한 상태 플래그를 구현한 부분이다.
+    //윷을 던질 수 있는가에 대한 플래그
+
     public void nextTurn(){
-        //currentTurn에 계속 1을 더해서 턴을 진행시킨다. 만일 oneMoreChance가 1일시 해당 bool값을 0으로 바꾸고 currentTurn값은 바뀌지 않는다.
-        // (currentTurn + 1) % (player – 1)을 currentTurn에 넣고 return한다. 1을 빼는 이유는 인덱싱으로 일괄처리하도록 정했기 때문이다.
-        // 다른 계산에서도 혹시 관련 연산을 수행해야 한다면 인덱싱으로 처리하는 것을 우선하기 바란다.
-        //if (oneMoreChance) {
         oneMoreChance = true;
-        //    return; // 한 번 더 기회가 있었던 경우, 턴 유지
-        //}
         currentTurn = (currentTurn + 1) % numberOfPlayers;
     };
 
     public void processMove(int srcPathNodeId, int length) {
         //한마디로 srcPathNodeId에 있는 모든 말들을 length만큼 전진시키는 함수이다.
-        /* 이 문단은 정의되지 않은 움직임에 관한 예외처리를 담고 있다. 현재 진영의 말을 선택했는지 꼭 확인해야 한다!! 만일 일치하지 않을 시 사용자가 잘못된 입력을 입력한 것으로 오류 코드인 -1을 반환한다. 그리고 즉시 프로세스를 종료한다. 예외 처리는 메인 함수에서 처리하도록 한다.
-        이 문단은 업기의 특수한 예외 상황에 관한 추가적인 처리이다. srcPathNode이 0인지 확인한다. 0일시, 현재 윷을 던진 사람의 팀의 말 하나만 length에 대응하는 로케이 션 내의 어레이의 위치로 이동한다. 만일 이 기능이 제대로 구현되지 않았다면 시작 위치에 있는 말들이 싹 다 이동하는 별로 좋지 않은 일이 벌어질 것이다.
-        예를 들면 도인 상황이라면 해당 위치의 말들이 possibleDoMove 해당 int 어레이의 내부 값으로 이동한다.
-        그 후 iscaptureOrGroup을 호출하기 전, 골인했는지를 반드시 먼저 확인해야 한다. 그렇지 않으면 골인 지점이자 시작 지점인 위치에서 iscaptureOrGroup이 실행되어 게임 흐름이 뒤죽박죽이 될 수 도 있다. 만일 골인했다면, scoreup을 실행한 뒤, 함수를 종료한다.(return)
-        processMove함수의 마지막 처리로 iscaptureOrGroup을 호출한다. 그렇게 하면 이론상 시작 위치를 제외한 다른 위치에서 다른 팀의 말끼리의 공존을 막을 수 있다.  */
-        if(srcPathNodeId==-5){
+        if(srcPathNodeId==-5){ // 아직 출발하지 않은 말의 이동인 경우 이동되는 위치를 명시적으로 제공하며 하나의 말만 출발한다
             for(int i=0; i<numberOfPiecesForEachPlayer; i++){
                 if(gamePieces[currentTurn][i].getCurrentPathNodeId()==-5){
                     switch (length) {
@@ -145,12 +90,12 @@ public class GameManager {
                         case 5: gamePieces[currentTurn][i].setPathNodeId(5); break;
                         case -1: gamePieces[currentTurn][i].setPathNodeId(-5); break;
                     }
-                    isCaptureOrGroup(gamePieces[currentTurn][i].getCurrentPathNodeId());
+                    isCaptureOrGroup(gamePieces[currentTurn][i].getCurrentPathNodeId()); // 이동된 위치에 말이 있으면 잡거나 업는다
                     return; // 출발하지 않은 말은 하나만 출발
                 }
             }
         }
-        for(int i=0; i<numberOfPiecesForEachPlayer; i++){
+        for(int i=0; i<numberOfPiecesForEachPlayer; i++){ //해당 위치에 있는 모든 말들을 이동한다 == 업은 모든 말 이동
             if(gamePieces[currentTurn][i].getCurrentPathNodeId()==srcPathNodeId){
                 switch (length) {
                     case 1: gamePieces[currentTurn][i].setPathNodeId(board.getPathNodes()[srcPathNodeId].getPossibleDoMove()); break;
@@ -160,11 +105,11 @@ public class GameManager {
                     case 5: gamePieces[currentTurn][i].setPathNodeId(board.getPathNodes()[srcPathNodeId].getPossibleMoMove()); break;
                     case -1: gamePieces[currentTurn][i].setPathNodeId(board.getPathNodes()[srcPathNodeId].getPossibleBackDoMove()); break;
                 }
-                if(gamePieces[currentTurn][i].getCurrentPathNodeId()==100){
+                if(gamePieces[currentTurn][i].getCurrentPathNodeId()==100){ // 골인했다면 점수를 획득한다
                     scoreUp(i);
                 }
                 else{
-                    isCaptureOrGroup(gamePieces[currentTurn][i].getCurrentPathNodeId());
+                    isCaptureOrGroup(gamePieces[currentTurn][i].getCurrentPathNodeId()); // 잡았는지 업는지 판단
                 }
                 gamePieces[currentTurn][i].selected = false; // 이동 후 선택 해제
             }
@@ -174,14 +119,11 @@ public class GameManager {
     private int[] playerScores;
     public void scoreUp(int pieceId){
         //pieceId에 해당하는 게임 말을 조회하고, 그 말의 수만큼 그 팀(개인전이므로 해당 플레이어가 된다)의 스코어를 올린다.
-        // 이후 그 말(들)은 위치 정보를 -1로 표기한다. (승리조건과 디버깅을 위해, 그리고 이러한 값 설정은 추적에도 용이하다.)
         Piece piece = gamePieces[currentTurn][pieceId]; // 현재 플레이어 기준
         int playerId = piece.getPlayerId();             // 말에 저장된 플레이어 ID
         int groupSize = piece.getEachPieces().size(); // 말에 업힌 개수
 
-        //playerScores[playerId] += groupSize;
         playerScores[playerId]+=1;
-        //piece.setPathNodeId(-1);
 
         System.out.println("Player " + players[playerId].getName() +
                 " scored " + groupSize + " point(s)!");
@@ -190,9 +132,9 @@ public class GameManager {
     public void isCaptureOrGroup(int srcNodeId){
         //겹쳤는가? 겹쳤다면 잡는가? 그게 아니라면 업는가?에 관한 함수이다. 인자로 시작 위치를 받았을 경우에는 반드시 아무 연산도 하지 않고 return한다. 게임 시작 시 시작 위치에 겹쳐 있기 때문이다.
         //인자로 받은 위치를 조회하고, 그 위치에 존재하는 모든 말을 추적하여 만일 겹치는 말이 있다면 잡을지 업을지 결정한다.
-        // 방금 윷을 던진 팀을 추적하고, 해당 위치에 있는 다른 말이 상태 편 말이라면 상대편 말(들)의 위치를 0으로 바꾸고 oneMoreChance를 1로 바꾸고 return한다.
+        // 방금 윷을 던진 팀을 추적하고, 해당 위치에 있는 다른 말이 상태 편 말이라면 상대편 말(들)의 위치를 -5으로 바꾸고 oneMoreChance를 true로 바꾸고 return한다.
         // 이는 상대편 말이 잡혀서 시작 위치로 돌아간 것과 잡으면 한번 더 하는 것을 구현한 것이다.
-        // 그게 아군의 말이라면 그 위치에 있는 모든 아군의 말들에 관한 업기 연산을 수행한다. 그 후return한다. (업기)’
+        // 그게 아군의 말이라면 그 위치에 있는 모든 아군의 말들에 관한 업기 연산을 수행한다.
         if (srcNodeId==-5) return; // 시작 위치에서는 겹침을 무시한다.
 
         Piece movedPiece=null; // 현재 턴에 이동한 자신의 말
@@ -222,43 +164,18 @@ public class GameManager {
                         System.out.println("Player " + currentTurn + " captured opponent piece!");
                     } else {
                         // 아군 말이면 업기
+                        // 서로 업는 것으로 하여 서로에 대한 정보를 저장한다
                         movedPiece.groupPiece(target);
                         target.groupPiece(movedPiece);
-                        System.out.print(movedPiece.getEachPieces().size());
-                        System.out.print(target.getEachPieces().size());
-                        //target.setPathNodeId(-1); // 기존 말을 비활성화
                         System.out.println("Player " + currentTurn + " grouped with own piece.");
                     }
-                    //return;
                 }
             }
         }
-
-        //그리고 isCapturedOrGrouped 기능이 넘 커지는 것 같아서 이 함수는 겹치는지 비교만하고, 잡거나 그룹화 하는 코드는 분리해서 함수로 만드는 거 어때요? -> iscapturedOrGrouped는 그냥 위치에 있는 말 조회해서 겹치는게 있나 있다면 상대편거가 섞여있나 섞여있다고? 너 시작위치로! 아니라고? 그냥 grouped1로 바꾸고 리턴
     };
 
-//    public boolean checkWinCondition(){
-//        // 매 턴이 끝날 때마다 호출된다.
-//        // 만일 한 팀의 모든 말이 필드에 존재하지 않을 경우(모든 말의 위치가 -1), 게임은 끝나고,
-//        // 그 팀(개인전이므로 해당 플레이어가 된다)이 승리한다. 어느 팀(개인전이므로 해당 플레이어가 된다)도 그 조건을 만족시키지 못할 경우 게임은 계속된다.
-//        for (int i = 0; i < numberOfPlayers; i++) {
-//            boolean allOut = true;
-//            for (int j = 0; j < numberOfPiecesForEachPlayer; j++) {
-//                if (gamePieces[i][j].getCurrentPathNodeId() != -1) {
-//                    allOut = false;
-//                    break;
-//                }
-//            }
-//            if (allOut) {
-//                System.out.println("Player " + players[i].getName() + "win!");
-//                return true;
-//            }
-//        }
-//        return false;
-//    };
-
     public boolean checkWinCondition(){
-        // 매 턴이 끝날 때마다 호출된다.
+        // 이동한 후에 호출된다
         // 플레이어의 점수가 총 말의 수와 같아지면 해당 플레이어가 승리한다.
         for (int i = 0; i < numberOfPlayers; i++) {
             if (playerScores != null && i < playerScores.length &&
@@ -321,36 +238,47 @@ public class GameManager {
         }
     }
 
+    //플레이어의 수를 반환한다
     public int getNumberOfPlayers() {
         return numberOfPlayers;
     }
+
+    //플레이어의 이름을 반환한다
     public String getPlayerName(int index) {
         return players[index].getName();
     }
 
+    //플에이어의 점수를 반환한다
     public int getPlayerScore(int index) {
         return playerScores[index];
     }
 
+    //현재 턴의 플레이어 이름을 반환한다
     public String getCurrentTurnName() {
         return players[currentTurn].getName();
     }
+
+    //현재 턴의 플레이어를 반환한다
     public Player getCurrentPlayer() {
         return players[currentTurn];
     }
 
+    //플레이어당 말의 수를 반환한다
     public int getNumberOfPiecesPerPlayer() {
         return numberOfPiecesForEachPlayer;
     }
 
+    //보드의 모양을 반환한다
     public Board getBoard() {
         return board;
     }
 
+    //모든 말을 반환한다
     public Piece[][] getGamePieces() {
         return gamePieces;
     }
 
+    //현재 턴을 반환한다
     public int getCurrentTurn(){
         return currentTurn;
     }
@@ -369,30 +297,37 @@ public class GameManager {
         return count;
     }
 
+    //윷을 던질 기회가 있는지 반환한다
     public boolean getChance(){
         return oneMoreChance;
     }
 
+    //윷을 던질 기회가 없도록 바꾼다
     public void noChance(){
         oneMoreChance = false;
     }
 
+    //윷을 던질 기회를 준다
     public void moreChance(){
         oneMoreChance = true;
     }
 
+    //윷 결과를 반환한다
     public ArrayList<DiceResult> getDiceResult() {
         return currentDiceResult;
     }
 
+    //지정 윷 결과를 저장한다
     public void addSelectDiceResult(DiceResult select){
         currentDiceResult.add(select);
     }
 
+    //사용한 윷을 윷 결과에서 제거한다
     public void deleteUsedDiceResult(DiceResult use){
         currentDiceResult.remove(use);
     }
 
+    //윷 결과에 빽도만 있는지 확인한다
     public boolean onlyBackDo(){
         for (DiceResult diceResult : currentDiceResult) {
             if (diceResult.getMoveSteps() != -1) {

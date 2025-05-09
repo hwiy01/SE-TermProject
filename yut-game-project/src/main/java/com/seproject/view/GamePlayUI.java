@@ -406,12 +406,4 @@ public class GamePlayUI extends JFrame {
         // 2초 후 자동 닫기
         new Timer(2000, e -> YutResult.dispose()).start();
     }
-
-//    public int showWhichResultToUse(DiceResult[] outcomes){
-//        //윷이나 모가 나와서 여러 번 던질 시에 관한 예외 처리이다. Outcomes 중 어떤 것을 선택해서 움직일지 플레이어로부터 입력을 받는다. 선택된 length(도라면 1)를 반환한다.
-//    };
-//
-//    public int showWhichPieceToMove(){
-//        //게임 중에 무슨 말을 움직일 건지 입력받아 해당 말의 id를 반환한다. 실제로 가능한가는 gameManager안에서만 확인할 수 있다.
-//    };
 }
