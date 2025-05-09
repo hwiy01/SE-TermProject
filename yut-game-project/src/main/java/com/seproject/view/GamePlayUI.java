@@ -126,6 +126,7 @@ public class GamePlayUI extends JFrame {
             if(gameManager.getChance()) {
                 gameManager.rollDice();
                 showDiceResult(gameManager.getDiceResult());
+                yutResultImage(gameManager.getDiceResult().getLast().getMoveSteps());
                 gameManager.noChance();
                 if(gameManager.getDiceResult().getLast().getMoveSteps()==4 || gameManager.getDiceResult().getLast().getMoveSteps()==5){
                     gameManager.moreChance();
@@ -185,6 +186,7 @@ public class GamePlayUI extends JFrame {
                 if (result == null) return; // 사용자가 선택 취소한 경우
                 gameManager.addSelectDiceResult(result);
                 showDiceResult(gameManager.getDiceResult());
+                yutResultImage(gameManager.getDiceResult().getLast().getMoveSteps());
                 gameManager.noChance();
                 if(gameManager.getDiceResult().getLast().getMoveSteps()==4 || gameManager.getDiceResult().getLast().getMoveSteps()==5){
                     gameManager.moreChance();
@@ -358,6 +360,52 @@ public class GamePlayUI extends JFrame {
         //승리한 플레이어를(개인전이므로) 화면에 출력한다.
         JOptionPane.showMessageDialog(this, player.getName() + " 님이 승리하였습니다!", "게임 종료", JOptionPane.INFORMATION_MESSAGE);
     };
+
+    public void yutResultImage(int result){
+        JWindow YutResult = new JWindow();
+        JLabel imageIcon;
+        switch(result){
+            case 1:{
+                ImageIcon image = new ImageIcon("yut-game-project\\src\\main\\java\\com\\seproject\\img\\DO_IMG.jpg");
+                Image scaled = image.getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH);
+                imageIcon = new JLabel(new ImageIcon(scaled));
+                break;}
+            case 2:{
+                ImageIcon image = new ImageIcon("yut-game-project\\src\\main\\java\\com\\seproject\\img\\GAE_IMG.jpg");
+                Image scaled = image.getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH);
+                imageIcon = new JLabel(new ImageIcon(scaled));
+                break;}
+            case 3:{
+                ImageIcon image = new ImageIcon("yut-game-project\\src\\main\\java\\com\\seproject\\img\\GEOL_IMG.jpg");
+                Image scaled = image.getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH);
+                imageIcon = new JLabel(new ImageIcon(scaled));
+                break;}
+            case 4: {
+                ImageIcon image = new ImageIcon("yut-game-project\\src\\main\\java\\com\\seproject\\img\\YUT_IMG.jpg");
+                Image scaled = image.getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH);
+                imageIcon = new JLabel(new ImageIcon(scaled));
+                break;}
+            case 5: {
+                ImageIcon image = new ImageIcon("yut-game-project\\src\\main\\java\\com\\seproject\\img\\MO_IMG.jpg");
+                Image scaled = image.getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH);
+                imageIcon = new JLabel(new ImageIcon(scaled));
+                break;}
+            case -1: {
+                ImageIcon image = new ImageIcon("yut-game-project\\src\\main\\java\\com\\seproject\\img\\BACKDO_IMG.jpg");
+                Image scaled = image.getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH);
+                imageIcon = new JLabel(new ImageIcon(scaled));
+                break;}
+            default: imageIcon = null;
+        }
+        YutResult.getContentPane().add(imageIcon);
+        YutResult.pack();
+        YutResult.setLocationRelativeTo(this); // 메인 프레임 기준 중앙
+
+        YutResult.setVisible(true);
+
+        // 2초 후 자동 닫기
+        new Timer(2000, e -> YutResult.dispose()).start();
+    }
 
 //    public int showWhichResultToUse(DiceResult[] outcomes){
 //        //윷이나 모가 나와서 여러 번 던질 시에 관한 예외 처리이다. Outcomes 중 어떤 것을 선택해서 움직일지 플레이어로부터 입력을 받는다. 선택된 length(도라면 1)를 반환한다.

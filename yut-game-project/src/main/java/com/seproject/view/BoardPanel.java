@@ -51,6 +51,13 @@ public class BoardPanel extends JPanel {
             g2.drawOval(x - baseNodeRadius, y - baseNodeRadius, baseNodeRadius * 2, baseNodeRadius * 2);
         }
 
+        String start = "START";
+        int startX = (int) (board.getPathNodes()[0].x_ratio * width);
+        int startY = (int) (board.getPathNodes()[0].y_ratio * height);
+        g2.setFont(new Font("Arial", Font.BOLD, 13));
+        g2.setColor(Color.BLACK);
+        g2.drawString(start, (int) (startX - 0.85 * baseNodeRadius), (int) (startY + 2 * baseNodeRadius));
+
         // 말 그리기
         for(Piece[] playerPieces : piece){
             for(Piece eachP : playerPieces){
