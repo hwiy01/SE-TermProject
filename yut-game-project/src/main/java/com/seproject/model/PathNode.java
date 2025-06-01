@@ -1,16 +1,24 @@
 package com.seproject.model;
 
 public class PathNode {
+
+    //생성자에서 각 판에 대한 노드 정보를 하드코딩으로 구현하였음
+    //각 노드별로 UI의 어느 위치에 그려지는지에 대한 정보를 담음
+    //x축과 y축의 좌표 비율을 활용해 저장하였음
     public PathNode(int pathNodeId, int BoardType){
         //생성자이다. 로케이션 아이디와 게임판 형식을 인자로 받고 그 아이디에 대응하는 정보를 함수가 입력한다. 말을 움직일 때 이는 switch문으로 하나하나 처리되어야 한다. 아래는 게임판 타입 정수 변수가 4일때의 참고용 그림이다.
         switch(BoardType){
-            case 4:{ //사각형
+            case 4:{ // 사각형 말판
                 if(pathNodeId==5 || pathNodeId==10){
                     inBranch=1;
                 }
                 else{
                     inBranch=0;
                 }
+
+                // 네 꼭짓점 및 가운데 지점 -> 말판에 그릴때 원 2개로 표시하기 위함.
+                this.cross = pathNodeId == 0 || pathNodeId == 5 || pathNodeId == 10 || pathNodeId == 15 || pathNodeId == 22;
+
                 if(pathNodeId==0){ // 골인지점에 위치한 경우 빽도가 아니라면 30으로 이동해서 골인했음을 의미함 (30 이상은 모두 골인을 의미)
                     possibleDoMove=30;
                     possibleGaeMove=30;
@@ -19,7 +27,7 @@ public class PathNode {
                     possibleMoMove=30;
                     possibleBackDoMove=19;
                 }
-                else if(inBranch==1){
+                else if(inBranch==1){ //분기점에서는 다른 방향으로 이동
                     possibleDoMove=pathNodeId+15;
                     possibleGaeMove=pathNodeId+16;
                     possibleGurlMove=pathNodeId+17; //22번과 27번은 같은 pathNode임
@@ -94,6 +102,52 @@ public class PathNode {
                         possibleMoMove=0;
                     }
                 }
+                // 노드가 그려지는 위치 비율 저장
+                if(pathNodeId>=0 && pathNodeId<6){
+                    x_ratio=0.9;
+                    y_ratio=0.9 - (pathNodeId*0.16);
+                }
+                else if(pathNodeId>=6 && pathNodeId<11){
+                    x_ratio=0.9 - ((pathNodeId-5)*0.16);
+                    y_ratio=0.1;
+                }
+                else if(pathNodeId>=11 && pathNodeId<16){
+                    x_ratio=0.1;
+                    y_ratio=0.1 + ((pathNodeId-10)*0.16);
+                }
+                else if(pathNodeId>=16 && pathNodeId<20){
+                    x_ratio=0.1+((pathNodeId-15)*0.16);
+                    y_ratio=0.9;
+                }
+                else if(pathNodeId>=20 && pathNodeId<25){
+                    x_ratio=0.9 - ((pathNodeId-19)*0.13);
+                    y_ratio=0.1 + ((pathNodeId-19)*0.13);
+                }
+                else if(pathNodeId>=25 && pathNodeId<30){
+//                    x_ratio=0.12 + ((pathNodeId-24)*0.13); // 중앙 노드 겹치게 하기 위함임
+//                    y_ratio=0.1 * ((pathNodeId-24)*0.13);
+                    if (pathNodeId == 27) {
+                        this.visible = false;
+                    }
+                    x_ratio = 0.25 + ((pathNodeId - 25) * 0.12);
+                    y_ratio = 0.25 + ((pathNodeId - 25) * 0.12);
+                }
+                //30보다 크면 100을 저장해서 골인했음을 의미함
+                if(possibleDoMove>=30){
+                    possibleDoMove=100;
+                }
+                if(possibleGaeMove>=30){
+                    possibleGaeMove=100;
+                }
+                if(possibleGurlMove>=30){
+                    possibleGurlMove=100;
+                }
+                if(possibleYutMove>=30){
+                    possibleYutMove=100;
+                }
+                if(possibleMoMove>=30){
+                    possibleMoMove=100;
+                }
             } break;
             case 5:{ //오각형
                 if(pathNodeId==5 || pathNodeId==10 || pathNodeId==15){
@@ -102,6 +156,9 @@ public class PathNode {
                 else{
                     inBranch=0;
                 }
+
+                this.cross = pathNodeId == 0 || pathNodeId == 5 || pathNodeId == 10 || pathNodeId == 15 || pathNodeId == 20 || pathNodeId == 27;
+
                 if(pathNodeId==0){ // 골인지점에 위치한 경우 빽도가 아니라면 골인했음을 의미하는 ??로 이동
                     possibleDoMove=40;
                     possibleGaeMove=40;
@@ -124,7 +181,7 @@ public class PathNode {
                     possibleGurlMove=0;
                     possibleYutMove=40;
                     possibleMoMove=40;
-                    possibleBackDoMove=31;
+                    possibleBackDoMove=pathNodeId-1;
                 }
                 else if(pathNodeId>24 && pathNodeId<30){
                     possibleDoMove=((pathNodeId+1)/30)*20+((pathNodeId+1)%30);
@@ -198,6 +255,65 @@ public class PathNode {
                         possibleMoMove=0;
                     }
                 }
+                if(pathNodeId>=0 && pathNodeId<6){
+                    x_ratio=0.75 + (pathNodeId*0.03);
+                    y_ratio=0.9 - (pathNodeId*0.096);
+                }
+                else if(pathNodeId>=6 && pathNodeId<11){
+                    x_ratio=0.9- ((pathNodeId-5)*0.08);
+                    y_ratio=0.42 - ((pathNodeId-5)*0.064);
+                }
+                else if(pathNodeId>=11 && pathNodeId<16){
+                    x_ratio=0.5 - ((pathNodeId-10)*0.08);
+                    y_ratio=0.1 + ((pathNodeId-10)*0.064);
+                }
+                else if(pathNodeId>=16 && pathNodeId<21){
+                    x_ratio=0.1 + ((pathNodeId-15)*0.03);
+                    y_ratio=0.42 + ((pathNodeId-15)*0.096);
+                }
+                else if(pathNodeId>=21 && pathNodeId<25){
+                    x_ratio=0.25 + ((pathNodeId-20)*0.1);
+                    y_ratio = 0.9;
+                }
+                else if(pathNodeId>=25 && pathNodeId<28){
+                    x_ratio=0.89 - ((pathNodeId-24)*0.13);
+                    y_ratio=0.43 + ((pathNodeId-24)*0.05); //중앙 노드의 좌표 비 : 0.5, 0.58
+                }
+                else if(pathNodeId>=28 && pathNodeId<30){
+                    x_ratio=0.5 - ((pathNodeId-27)*0.08);
+                    y_ratio=0.58 + ((pathNodeId-27)*0.1);
+                }
+                else if(pathNodeId>=30 && pathNodeId<33){
+                    x_ratio=0.5;
+                    y_ratio=0.1 + ((pathNodeId - 29)*0.16);
+                }
+                else if(pathNodeId>=33 && pathNodeId<35){
+                    x_ratio = 0.5 - ((pathNodeId - 32)*0.08);
+                    y_ratio = 0.58 + ((pathNodeId - 32)*0.1);
+                }
+                else if(pathNodeId>=35 && pathNodeId<38){
+                    x_ratio = 0.11 + ((pathNodeId-34)*0.13);
+                    y_ratio = 0.43 + ((pathNodeId-34)*0.05);
+                }
+                else if(pathNodeId>=38 && pathNodeId<40){
+                    x_ratio = 0.5 + ((pathNodeId-37)*0.08);
+                    y_ratio = 0.58 + ((pathNodeId-37)*0.1);
+                }
+                if(possibleDoMove>=40){
+                    possibleDoMove=100;
+                }
+                if(possibleGaeMove>=40){
+                    possibleGaeMove=100;
+                }
+                if(possibleGurlMove>=40){
+                    possibleGurlMove=100;
+                }
+                if(possibleYutMove>=40){
+                    possibleYutMove=100;
+                }
+                if(possibleMoMove>=40){
+                    possibleMoMove=100;
+                }
             } break;
             case 6:{ //6각형의 경우 //
                 if(pathNodeId==5 || pathNodeId==10 || pathNodeId==15 || pathNodeId==20){
@@ -206,6 +322,9 @@ public class PathNode {
                 else{
                     inBranch=0;
                 }
+
+                this.cross = pathNodeId == 0 || pathNodeId == 5 || pathNodeId == 10 || pathNodeId == 15 || pathNodeId == 20 || pathNodeId == 25 || pathNodeId == 42;
+
                 if(pathNodeId==0){ // 골인지점에 위치한 경우 빽도가 아니라면 골인했음을 의미하는 50으로 이동
                     possibleDoMove=50;
                     possibleGaeMove=50;
@@ -213,6 +332,14 @@ public class PathNode {
                     possibleYutMove=50;
                     possibleMoMove=50;
                     possibleBackDoMove=29;
+                }
+                else if(pathNodeId==-5){
+                    possibleDoMove=1;
+                    possibleGaeMove=2;
+                    possibleGurlMove=3;
+                    possibleYutMove=4;
+                    possibleMoMove=5;
+                    possibleBackDoMove=-5;
                 }
                 else if(inBranch==1){
                     possibleDoMove=pathNodeId+25;
@@ -228,7 +355,7 @@ public class PathNode {
                     possibleGurlMove=0;
                     possibleYutMove=50;
                     possibleMoMove=50;
-                    possibleBackDoMove=36;
+                    possibleBackDoMove=pathNodeId-1;
                 }
                 else if(pathNodeId>29 && pathNodeId<35){
                     possibleDoMove=((pathNodeId+1)/35)*25+((pathNodeId+1)%35);
@@ -315,12 +442,84 @@ public class PathNode {
                         possibleMoMove=0;
                     }
                 }
+                if(pathNodeId>=0 && pathNodeId<6){
+                    x_ratio = 0.7 + (pathNodeId*0.04);
+                    y_ratio = 0.9 - (pathNodeId*0.08);
+                }
+                else if(pathNodeId>=6 && pathNodeId<11){
+                    x_ratio = 0.9 - ((pathNodeId-5)*0.04);
+                    y_ratio = 0.5 - ((pathNodeId-5)*0.08);
+                }
+                else if(pathNodeId>=11 && pathNodeId<16){
+                    x_ratio = 0.7 - ((pathNodeId-10)*0.08);
+                    y_ratio = 0.1;
+                }
+                else if(pathNodeId>=16 && pathNodeId<21){
+                    x_ratio = 0.3 - ((pathNodeId-15)*0.04);
+                    y_ratio = 0.1 + ((pathNodeId-15)*0.08);
+                }
+                else if(pathNodeId>=21 && pathNodeId<26){
+                    x_ratio = 0.1 + ((pathNodeId-20)*0.04);
+                    y_ratio = 0.5 + ((pathNodeId-20)*0.08);
+                }
+                else if(pathNodeId>=26 && pathNodeId<30){
+                    x_ratio = 0.3 + ((pathNodeId-25)*0.08);
+                    y_ratio = 0.9;
+                }
+                else if(pathNodeId>=30 && pathNodeId<33){
+                    x_ratio = 0.89 - ((pathNodeId-29)*0.13); // 중앙 노드 : 0.5,0.5
+                    y_ratio = 0.5;
+                    if (pathNodeId == 32) {
+                        this.visible = false;
+                    }
+                }
+                else if(pathNodeId>=33 && pathNodeId<35){
+                    x_ratio = 0.5 - ((pathNodeId-32)*0.07);
+                    y_ratio = 0.5 + ((pathNodeId-32)*0.13);
+                }
+                else if(pathNodeId>=35 && pathNodeId<40){
+                    x_ratio = 0.71 - ((pathNodeId-34)*0.07);
+                    y_ratio = 0.11 + ((pathNodeId-34)*0.13);
+                    if (pathNodeId == 37) {
+                        this.visible = false;
+                    }
+                }
+                else if(pathNodeId>=40 && pathNodeId<43){
+                    x_ratio = 0.29 + ((pathNodeId-39)*0.07);
+                    y_ratio = 0.11 + ((pathNodeId-39)*0.13);
+
+                }
+                else if(pathNodeId>=43 && pathNodeId<45){
+                    x_ratio = 0.5 - ((pathNodeId-42)*0.07);
+                    y_ratio = 0.5 + ((pathNodeId-42)*0.13);
+                }
+                else if(pathNodeId>=45 && pathNodeId<48){
+                    x_ratio = 0.11 + ((pathNodeId-44)*0.13);
+                    y_ratio = 0.5;
+                }
+                else if(pathNodeId>=48 && pathNodeId<50){
+                    x_ratio = 0.5 + ((pathNodeId-47)*0.07);
+                    y_ratio = 0.5 + ((pathNodeId-47)*0.13);
+                }
+                if(possibleDoMove>=50){
+                    possibleDoMove=100;
+                }
+                if(possibleGaeMove>=50){
+                    possibleGaeMove=100;
+                }
+                if(possibleGurlMove>=50){
+                    possibleGurlMove=100;
+                }
+                if(possibleYutMove>=50){
+                    possibleYutMove=100;
+                }
+                if(possibleMoMove>=50){
+                    possibleMoMove=100;
+                }
             }break;
         }
     };
 
-    //빨간 화살표와 빨간 원 설명과 무관하니 무시하자.
-    //가장자리는 순서대로 0~19/22/30로 설정하고, 안의 부분은 순서 상관없이 겹치지만 않게 설정하면 충돌은 없다. 분기점에 대해서는 inBranch == 1로 설정하시면 된다. 이부분은 하드코딩 부분이 있어 길어질것 같으니.. 파일을 따로 분리하는 것도 좋을 것 같다.
     //아래 5개의 변수에는 현재 위치에서 도, 개, 걸, 윷, 모가 나왔을 시 이동할 수 있는 위치를 지정한다. 현재 규칙 상 이는 각각 원소의 개수가 하나이므로 int로 선언해도 되지만, 분기점에서의 규칙이 바뀔 경우를 대비하여 어레이로 선언하는 쪽으로 생각했다.
     private int possibleDoMove;
     private int possibleGaeMove;
@@ -328,6 +527,8 @@ public class PathNode {
     private int possibleYutMove;
     private int possibleMoMove;
     private int possibleBackDoMove;
+    public double x_ratio; // x축 위치 비율
+    public double y_ratio; // y축 위치 비율
 
     public int getPossibleDoMove(){
         return possibleDoMove;
@@ -345,7 +546,7 @@ public class PathNode {
         return possibleMoMove;
     };
     public int getPossibleBackDoMove(){
-        return possibleMoMove;
+        return possibleBackDoMove;
     };
 
     private int inBranch;   //분기점(갈림길)인지 아닌지를 저장한다. 디폴트값은 0
@@ -354,4 +555,8 @@ public class PathNode {
         return inBranch;
     };
 
+    private boolean visible = true;
+    private boolean cross = false;
+    public boolean isVisible() { return visible; }
+    public boolean isCross(){return cross; }
 };
