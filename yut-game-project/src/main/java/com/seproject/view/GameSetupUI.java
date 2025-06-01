@@ -1,158 +1,243 @@
 package com.seproject.view;
 
 import com.seproject.controller.GameManager;
-import com.seproject.model.Player;
+import javafx.application.Platform;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
-public class GameSetupUI extends JFrame {
+//
+// Java FX 버전의 게임 설정 화면.
+//
+//  ※ 기존 Swing 코드에서 했던 일을 그대로 수행하지만,
+//  {@link javax.swing.JFrame}/{@link javax.swing.JDialog} 대신
+//  {@link Stage}·{@link Scene}·Java FX 컨트롤을 사용합니다.
+//
+// 이 클래스는 <strong>FX Application Thread</strong> 안에서 인스턴스화되어야 합니다.
+// App.java(시작점)에서 {@code Application.launch()} 후
+// {@code new GameSetupUI(gameManager);} 식으로 호출해 주세요.
+//
+public class GameSetupUI {
 
-    public GameSetupUI(GameManager gameManager){
-        setTitle("Yut-Nol-I setting"); //Frame의 title
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //x버튼으로 창 종료 기능
-        setSize(500, 300); //창 크기
-        setLocationRelativeTo(null); //창 가운데에 나타나도록 설정
-        setLayout(new BorderLayout()); //layout 설정
+    // --------- fields --------- //
 
-        //상단에 레이블 설정
-        JLabel title = new JLabel("Yut-Nol-I setting", SwingConstants.CENTER); //제목 레이블 생성
-        title.setFont(new Font("맑은고딕", Font.BOLD, 20)); //폰트 설정
-        add(title, BorderLayout.NORTH); //상단에 레이블 추가
+    private final GameManager gameManager;
+    private final Stage primaryStage;
 
-        //중간 부분에 layout 설정
-        JPanel setting = new JPanel(new GridLayout(2, 1)); //중간부분을 2행 1열로 나누어서 각각 패널을 넣기 위한 layout
-        JPanel count = new JPanel(new GridLayout(1, 2)); //1행에 들어갈 패널 설정
+    // --------- constructor --------- //
 
-        //플레이어 수 선택 콤보박스 설정
-        JPanel numPlayer =new JPanel(new FlowLayout());
-        numPlayer.add(new JLabel("The Number of players"));
-        JComboBox<Integer> playerCombo = new JComboBox<>(new Integer[]{2, 3, 4}); //2, 3, 4 선택 가능한 콤보박스
-        numPlayer.add(playerCombo); //플레이어 수 콤보박스 numPlayer 패널에 추가
+    public GameSetupUI(GameManager gameManager) {
+        this.gameManager = gameManager;
 
-        //말 수 선택 콤보박스 선택
-        JPanel numPiece = new JPanel(new FlowLayout());
-        numPiece.add(new JLabel("The Number of pieces"));
-        JComboBox<Integer> pieceCombo = new JComboBox<>(new Integer[]{2, 3, 4, 5}); //2 ~ 5 선택 가능한 콤보박스
-        numPiece.add(pieceCombo); //말 수 콤보박스 numPiece 패널에 추가
+        //
+        // 만약 FX-스레드가 아직 뜨지 않은 상황에서 호출됐다면
+        // Platform.startup() 이 두 번 이상 호출될 수 없으므로
+        // 예외를 방지하기 위해 runLater() 로 넘겨 놓는다.
+        //
+        if (Platform.isFxApplicationThread()) {
+            this.primaryStage = buildAndShow();
+        } else {
+            final Stage[] holder = new Stage[1];
+            Platform.runLater(() -> holder[0] = buildAndShow());
+            this.primaryStage = holder[0];  // 나중에 필요할 수도 있으므로 필드에 보관
+        }
+    }
 
-        //플에이어 수랑 말 수에 대한 패널을 count 패널에 추가 -> 중간 부분의 1행에 추가
-        count.add(numPlayer);
-        count.add(numPiece);
-        setting.add(count);
+    // --------- UI 빌드 --------- //
 
-        //윷 판의 모양을 정하는 버튼
-        JPanel shapeBoard = new JPanel(new GridLayout(2, 1)); //1행에는 소제목 레이블을 넣는다
-        shapeBoard.add(new JLabel("Shape of Board")); //소제목 레이블
-        JPanel shapeButton = new JPanel(new FlowLayout()); //2행에 모양을 선택하는 버튼을 넣기 위한 패널
-        JToggleButton square = new JToggleButton("SQUARE"); //사각형 버튼
-        final JToggleButton pentagon = new JToggleButton("PENTAGON"); //오각형 버튼
-        JToggleButton hexagon = new JToggleButton("HEXAGON"); //육각형 버튼
+    private Stage buildAndShow() {
 
-        //세 버튼을 한 번에 하나만 선택되도록 하기 위해 그룹으로 묶는다
-        ButtonGroup shapeGroup = new ButtonGroup();
-        shapeGroup.add(square);
-        shapeGroup.add(pentagon);
-        shapeGroup.add(hexagon);
-        square.setSelected(true); //기본값으로 사각형이 선택되어 있음
+        // ---- 최상위 레이아웃 ---- //
+        BorderPane root = new BorderPane();
+        root.setPadding(new Insets(10));
 
-        //2행에 들어갈 패널에 각 버튼 추가
-        shapeButton.add(square);
-        shapeButton.add(pentagon);
-        shapeButton.add(hexagon);
+        // ---- 제목 ---- //
+        Label title = new Label("Yut-Nol-I setting");
+        title.setFont(Font.font("Malgun Gothic", FontWeight.BOLD, 20));
+        BorderPane.setAlignment(title, Pos.CENTER);
+        root.setTop(title);
 
-        //2행에 패널 추가 밑 중간부분의 2행에 패널 추가
-        shapeBoard.add(shapeButton);
-        setting.add(shapeBoard);
+        // ---- 가운데: 설정 섹션 ---- //
+        VBox settingBox = new VBox(15);
+        settingBox.setAlignment(Pos.CENTER);
+        settingBox.setPadding(new Insets(10));
 
-        //완성된 중간부분을 위한 패널을 추가한다
-        add(setting, BorderLayout.CENTER);
+        // 플레이어 수 & 말 수 //
+        HBox countRow = new HBox(30);
+        countRow.setAlignment(Pos.CENTER);
 
-        //next 버튼 -> 클릭 시 플레이어 수 말 수 윷 판 모양을 gamemanager에 저장하고 이름을 입력받는 창을 띄운다
-        JButton next = new JButton("NEXT");
-        next.addActionListener((ActionEvent e) -> { //버튼 클릭 이벤트
-            gameManager.setPlayer((Integer)playerCombo.getSelectedItem()); //플레이어 수 저장
-            gameManager.setPiece((Integer)pieceCombo.getSelectedItem()); //말 수 저장
-            //윷 판 모양 저장
-            if(square.isSelected()){
-                gameManager.setBoard(4);
+        HBox numPlayerBox = new HBox(5);
+        numPlayerBox.setAlignment(Pos.CENTER);
+        numPlayerBox.getChildren().add(new Label("The Number of players"));
+        ComboBox<Integer> playerCombo = new ComboBox<>();
+        playerCombo.getItems().addAll(2, 3, 4);
+        playerCombo.getSelectionModel().selectFirst();
+        numPlayerBox.getChildren().add(playerCombo);
+
+        HBox numPieceBox = new HBox(5);
+        numPieceBox.setAlignment(Pos.CENTER);
+        numPieceBox.getChildren().add(new Label("The Number of pieces"));
+        ComboBox<Integer> pieceCombo = new ComboBox<>();
+        pieceCombo.getItems().addAll(2, 3, 4, 5);
+        pieceCombo.getSelectionModel().selectFirst();
+        numPieceBox.getChildren().add(pieceCombo);
+
+        countRow.getChildren().addAll(numPlayerBox, numPieceBox);
+        settingBox.getChildren().add(countRow);
+
+        // 보드 모양 선택 //
+        VBox shapeBox = new VBox(5);
+        shapeBox.setAlignment(Pos.CENTER);
+
+        shapeBox.getChildren().add(new Label("Shape of Board"));
+
+        HBox shapeBtnRow = new HBox(10);
+        shapeBtnRow.setAlignment(Pos.CENTER);
+
+        ToggleGroup shapeGroup = new ToggleGroup();
+        ToggleButton squareBtn   = new ToggleButton("SQUARE");
+        ToggleButton pentagonBtn = new ToggleButton("PENTAGON");
+        ToggleButton hexagonBtn  = new ToggleButton("HEXAGON");
+        squareBtn  .setToggleGroup(shapeGroup);
+        pentagonBtn.setToggleGroup(shapeGroup);
+        hexagonBtn .setToggleGroup(shapeGroup);
+        squareBtn.setSelected(true);
+
+        shapeBtnRow.getChildren().addAll(squareBtn, pentagonBtn, hexagonBtn);
+        shapeBox.getChildren().add(shapeBtnRow);
+
+        settingBox.getChildren().add(shapeBox);
+        root.setCenter(settingBox);
+
+        // ---- 하단: NEXT 버튼 ---- //
+        Button nextBtn = new Button("NEXT");
+        nextBtn.setMaxWidth(Double.MAX_VALUE);
+        BorderPane.setAlignment(nextBtn, Pos.CENTER);
+        nextBtn.setOnAction(e -> onNext(
+                playerCombo.getValue(),
+                pieceCombo.getValue(),
+                squareBtn.isSelected(),
+                pentagonBtn.isSelected()));
+        root.setBottom(nextBtn);
+        BorderPane.setMargin(nextBtn, new Insets(10, 0, 0, 0));
+
+        // ---- Stage 세팅 ---- //
+        Scene scene = new Scene(root, 500, 300);
+        Stage stage = new Stage();
+        stage.setTitle("Yut-Nol-I setting");
+        stage.setScene(scene);
+        stage.show();
+
+        return stage;
+    }
+
+    // --------- NEXT 버튼 동작 --------- //
+
+    private void onNext(int numPlayers,
+                        int numPieces,
+                        boolean squareSelected,
+                        boolean pentagonSelected) {
+
+        // 컨트롤러에 값 전달 //
+        gameManager.setPlayer(numPlayers);
+        gameManager.setPiece(numPieces);
+        if (squareSelected)       gameManager.setBoard(4);
+        else if (pentagonSelected) gameManager.setBoard(5);
+        else                       gameManager.setBoard(6);
+
+        // 이름 입력 다이얼로그 //
+        String[] names = showNicknameInput(numPlayers);
+        for (String name : names) {
+            if (name == null) {
+                // 사용자가 취소했거나 입력 미완료
+                return;
             }
-            else if(pentagon.isSelected()){
-                gameManager.setBoard(5);
-            }
-            else{
-                gameManager.setBoard(6);
-            }
-            //이름 입력 창 띄우고 입력받은 이름을 gamemanager에 있는 player들의 이름에 저장한다
-            String[] names = showNicknameInput((Integer)playerCombo.getSelectedItem());
-            for(String name : names){
-                if(name==null){
+        }
+        gameManager.setPlayerName(names);
+
+        // 다음 단계로 진행 //
+        gameManager.playGame();
+
+        // 이 설정 창 닫기 //
+        primaryStage.close();
+    }
+
+    // --------- 닉네임 입력 다이얼로그 --------- //
+
+    public String[] showNicknameInput(int numberOfPlayer) {
+        String[] names = new String[numberOfPlayer];
+        Stage dialog = new Stage();
+        dialog.initOwner(primaryStage);
+        dialog.initModality(Modality.APPLICATION_MODAL);
+        dialog.setTitle("input name");
+
+        BorderPane root = new BorderPane();
+        root.setPadding(new Insets(10));
+
+        // 입력 필드 //
+        VBox nameBox = new VBox(5);
+        nameBox.setPadding(new Insets(10));
+        ArrayList<TextField> fields = new ArrayList<>();
+
+        for (int i = 0; i < numberOfPlayer; i++) {
+            HBox row = new HBox(5);
+            row.setAlignment(Pos.CENTER_LEFT);
+            Label lbl = new Label("Name of Player " + (i + 1) + ":");
+            TextField tf = new TextField();
+            fields.add(tf);
+            row.getChildren().addAll(lbl, tf);
+            nameBox.getChildren().add(row);
+        }
+        root.setCenter(nameBox);
+
+        // START 버튼 //
+        Button startBtn = new Button("START");
+        startBtn.setMaxWidth(Double.MAX_VALUE);
+        startBtn.setOnAction(e -> {
+            // 검증
+            Set<String> used = new HashSet<>();
+            for (int i = 0; i < fields.size(); i++) {
+                String text = fields.get(i).getText().trim();
+                if (text.isEmpty()) {
+                    showAlert("Input all names");
                     return;
                 }
-            }
-            gameManager.setPlayerName(names);
-            gameManager.playGame();
-        });
-
-        //next 버튼을 화면 하단에 추가한다
-        add(next, BorderLayout.SOUTH);
-
-        setVisible(true); //창 띄우기
-    }
-    private String[] nicknameBuffer;
-    //닉네임이 겹치는지 미리 확인하기 위해 존재한다.
-
-    public void showMainMenu(){
-        //메인 메뉴를 보여준다.
-    };
-    
-    //이름 입력 창
-    public String[] showNicknameInput(int numberOfPlayer){
-        //이름을 정하는 것을 유저에게 요구한다. 정해진 이름은 nicknameBuffer과 비교해서 겹치는 게 있나 확인한 후 겹치는게 없을 시 버퍼에 저장한다. 입력이 끝나면 지금까지 입력받은 닉네임들을 반환한다.
-        JDialog subFrame = new JDialog(this, "input name", true); //서브 창 생성
-        subFrame.setLayout(new BorderLayout());
-
-        //플레이어의 수 만큼 이름 입력 칸을 만든다
-        JPanel name = new JPanel(new GridLayout(numberOfPlayer, 2, 5, 5));
-        ArrayList<JTextField> inputName = new ArrayList<>();
-        for(int i=0; i<numberOfPlayer; i++){
-            name.add(new JLabel("Name of Player" + (i+1) + ": "));
-            JTextField field = new JTextField();
-            inputName.add(field);
-            name.add(field);
-        }
-
-        String[] names = new String[numberOfPlayer]; //입력받은 이름을 저장할 배열
-        //start 버튼 -> 클릭 시 게임이 시작된다 (이름을 전부 입력하지 않거나 중복 이름을 입력할 경우 메시지 출력 후 다시 입력받는다)
-        JButton start = new JButton("START");
-        start.addActionListener((ActionEvent e) -> { //버튼 클릭 이벤트
-
-            int i = 0; //저장한 이름의 개수 -> 이름이 중복인지 확인하기 위한 것
-            for(JTextField field : inputName){ //입력된 이름을 하나씩 가져와서 for문을 실행한다
-                for(int j=0; j<i; j++){ //중복인지 확인
-                    if(field.getText().trim().equals(names[j])){ //중복이면 메시지 출력 후 클릭 이벤트 종료 -> 게임 실행 안됨
-                        JOptionPane.showMessageDialog(subFrame, "duplication: \"" + field.getText().trim() + "\"");
-                        return;
-                    }
-                    if(field.getText().trim().isEmpty()){ //이름 미입력 시 메시지 출력 후 클릭 이벤트 종료 -> 게임 실행 안됨
-                        JOptionPane.showMessageDialog(subFrame, "Input all names");
-                        return;
-                    }
+                if (!used.add(text)) {
+                    showAlert("duplication: \"" + text + "\"");
+                    return;
                 }
-                names[i] = field.getText().trim(); //문제 없으면 입력된 이름을 배열에 저장
-                i++;
+                names[i] = text;
             }
-            subFrame.dispose(); //서브 창 제거
-            this.dispose(); //메인 창 제거 -> 다음 단계로 넘어간다 (게임 실행 단계)
-
+            dialog.close();
         });
-        subFrame.add(name, BorderLayout.CENTER);
-        subFrame.add(start, BorderLayout.SOUTH);
-        subFrame.pack();
-        subFrame.setLocationRelativeTo(this);
-        subFrame.setVisible(true);
-        return names; //입력된 이름을 반환한다
-    };
+        root.setBottom(startBtn);
+        BorderPane.setMargin(startBtn, new Insets(10, 0, 0, 0));
+
+        Scene scene = new Scene(root);
+        dialog.setScene(scene);
+        dialog.showAndWait();
+
+        return names;
+    }
+
+    // --------- 유틸: 경고 --------- //
+
+    private void showAlert(String msg) {
+        Alert alert = new Alert(AlertType.ERROR, msg, ButtonType.OK);
+        alert.initOwner(primaryStage);
+        alert.showAndWait();
+    }
 }
