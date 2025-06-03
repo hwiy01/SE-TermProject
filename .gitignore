@@ -6,3 +6,7 @@ target/
 
 # 로그 파일
 *.log
+
+META-INF/
+
+out/
