@@ -366,32 +366,32 @@ public class GamePlayUI extends JFrame {
         JLabel imageIcon;
         switch(result){
             case 1:{
-                ImageIcon image = new ImageIcon("yut-game-project\\src\\main\\java\\com\\seproject\\img\\DO_IMG.jpg");
+                ImageIcon image = new ImageIcon(getClass().getResource("/img/DO_IMG.jpg"));//"yut-game-project\\src\\main\\java\\com\\seproject\\img\\DO_IMG.jpg");
                 Image scaled = image.getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH);
                 imageIcon = new JLabel(new ImageIcon(scaled));
                 break;}
             case 2:{
-                ImageIcon image = new ImageIcon("yut-game-project\\src\\main\\java\\com\\seproject\\img\\GAE_IMG.jpg");
+                ImageIcon image = new ImageIcon(getClass().getResource("/img/GAE_IMG.jpg"));//"yut-game-project\\src\\main\\java\\com\\seproject\\img\\GAE_IMG.jpg");
                 Image scaled = image.getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH);
                 imageIcon = new JLabel(new ImageIcon(scaled));
                 break;}
             case 3:{
-                ImageIcon image = new ImageIcon("yut-game-project\\src\\main\\java\\com\\seproject\\img\\GEOL_IMG.jpg");
+                ImageIcon image = new ImageIcon(getClass().getResource("/img/GEOL_IMG.jpg"));//"yut-game-project\\src\\main\\java\\com\\seproject\\img\\GEOL_IMG.jpg");
                 Image scaled = image.getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH);
                 imageIcon = new JLabel(new ImageIcon(scaled));
                 break;}
             case 4: {
-                ImageIcon image = new ImageIcon("yut-game-project\\src\\main\\java\\com\\seproject\\img\\YUT_IMG.jpg");
+                ImageIcon image = new ImageIcon(getClass().getResource("/img/YUT_IMG.jpg"));//"yut-game-project\\src\\main\\java\\com\\seproject\\img\\YUT_IMG.jpg");
                 Image scaled = image.getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH);
                 imageIcon = new JLabel(new ImageIcon(scaled));
                 break;}
             case 5: {
-                ImageIcon image = new ImageIcon("yut-game-project\\src\\main\\java\\com\\seproject\\img\\MO_IMG.jpg");
+                ImageIcon image = new ImageIcon(getClass().getResource("/img/MO_IMG.jpg"));//"yut-game-project\\src\\main\\java\\com\\seproject\\img\\MO_IMG.jpg");
                 Image scaled = image.getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH);
                 imageIcon = new JLabel(new ImageIcon(scaled));
                 break;}
             case -1: {
-                ImageIcon image = new ImageIcon("yut-game-project\\src\\main\\java\\com\\seproject\\img\\BACKDO_IMG.jpg");
+                ImageIcon image = new ImageIcon(getClass().getResource("/img/BACKDO_IMG.jpg"));//"yut-game-project\\src\\main\\java\\com\\seproject\\img\\BACKDO_IMG.jpg");
                 Image scaled = image.getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH);
                 imageIcon = new JLabel(new ImageIcon(scaled));
                 break;}

@@ -1,7 +1,7 @@
 package com.seproject.model;
 
 public class EachPiece {
-    public EachPiece(int eachPieceId, int palyerId) {
+    public EachPiece(int eachPieceId, int playerId) {
         this.eachPieceId=eachPieceId;
         this.playerId=playerId;
     };
