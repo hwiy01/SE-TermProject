@@ -27,7 +27,8 @@ public class GameManager {
             this.playerScores = new int[this.numberOfPlayers];
 
         }
-        this.gamePlayUI = new GamePlayUI(this); // 테스트용
+        //this.gamePlayUI = new GamePlayUI(this); // swing ui 객체 생성
+        this.gamePlayUIFX = new GamePlayUIFX(this); // FX ui 객체 생성
     } //전체 게임 흐름을 담당하는 로직이다. main에서 호출될 예정이다. 승리자가 나올 때까지 아래의 함수들을 게임 흐름에 맞게 순차적으로 호출한다.
 
     public GameManager() {
@@ -55,8 +56,8 @@ public class GameManager {
     //플레이어 어레이이다. 각각의 플레이어 객체를 저장한다. 몇 명의 플레이어가 플레이 할지 모르기 때문에 게임 초기 입력을 받아서 그 숫자를 확정지어야 한다.
 
     private Board board; //게임판을 의미합니다. 모양이 달라질 경우 해당 모양에 대응되는 게임판 형식을 새로 하드코딩하여 보드 클래스 내부에 집어 넣고, 이 변수에 그 값을 집어넣는 식으로 사용할 수 있다. Board의 생성자를 이용하자.
-    // private GameSetupUI gameSetupUI; // 게임 설정에 대한 정보 받아오면 더 필요없으니 제거하는 것으로 수정
-    private GamePlayUI gamePlayUI; // 조작할 UI
+    //private GamePlayUI gamePlayUI; //swing 사용을 위한 변수
+    private GamePlayUIFX gamePlayUIFX; // FX 사용을 위한 변수
     private Dice[] dice;  //윷이다. // 길이 4 배열로 초기화
 
     //private DiceResult[] currentDiceResult;

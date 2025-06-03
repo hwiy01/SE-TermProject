@@ -11,8 +11,8 @@ public class App
     public static void main( String[] args )
     {
 
-        String UI = "swing";
-
+        //String UI = "swing"; // swing 사용
+        String UI = "FX"; // FX 사용
         if(UI.equals("swing")){
             javax.swing.SwingUtilities.invokeLater(() -> {
                 GameManager gameManager = new GameManager();
