@@ -5,7 +5,6 @@ import com.seproject.model.Board;
 import com.seproject.model.Dice;
 import com.seproject.model.Piece;
 import com.seproject.model.Player;
-//import com.seproject.view.GameSetupUI;
 import com.seproject.view.GamePlayUI;
 import com.seproject.view.GamePlayUIFX;
 

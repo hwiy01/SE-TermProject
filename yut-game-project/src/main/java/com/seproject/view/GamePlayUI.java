@@ -364,46 +364,32 @@ public class GamePlayUI extends JFrame {
     public void yutResultImage(int result){
         JWindow YutResult = new JWindow();
         JLabel imageIcon;
+        String path = null;
+
         switch(result){
-            case 1:{
-                ImageIcon image = new ImageIcon(getClass().getResource("/img/DO_IMG.jpg"));//"yut-game-project\\src\\main\\java\\com\\seproject\\img\\DO_IMG.jpg");
-                Image scaled = image.getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH);
-                imageIcon = new JLabel(new ImageIcon(scaled));
-                break;}
-            case 2:{
-                ImageIcon image = new ImageIcon(getClass().getResource("/img/GAE_IMG.jpg"));//"yut-game-project\\src\\main\\java\\com\\seproject\\img\\GAE_IMG.jpg");
-                Image scaled = image.getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH);
-                imageIcon = new JLabel(new ImageIcon(scaled));
-                break;}
-            case 3:{
-                ImageIcon image = new ImageIcon(getClass().getResource("/img/GEOL_IMG.jpg"));//"yut-game-project\\src\\main\\java\\com\\seproject\\img\\GEOL_IMG.jpg");
-                Image scaled = image.getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH);
-                imageIcon = new JLabel(new ImageIcon(scaled));
-                break;}
-            case 4: {
-                ImageIcon image = new ImageIcon(getClass().getResource("/img/YUT_IMG.jpg"));//"yut-game-project\\src\\main\\java\\com\\seproject\\img\\YUT_IMG.jpg");
-                Image scaled = image.getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH);
-                imageIcon = new JLabel(new ImageIcon(scaled));
-                break;}
-            case 5: {
-                ImageIcon image = new ImageIcon(getClass().getResource("/img/MO_IMG.jpg"));//"yut-game-project\\src\\main\\java\\com\\seproject\\img\\MO_IMG.jpg");
-                Image scaled = image.getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH);
-                imageIcon = new JLabel(new ImageIcon(scaled));
-                break;}
-            case -1: {
-                ImageIcon image = new ImageIcon(getClass().getResource("/img/BACKDO_IMG.jpg"));//"yut-game-project\\src\\main\\java\\com\\seproject\\img\\BACKDO_IMG.jpg");
-                Image scaled = image.getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH);
-                imageIcon = new JLabel(new ImageIcon(scaled));
-                break;}
-            default: imageIcon = null;
+
+            
+
+            case 1: path = "/com/seproject/img/DO_IMG.jpg"; break;
+            case 2: path = "/com/seproject/img/GAE_IMG.jpg"; break;
+            case 3: path = "/com/seproject/img/GEOL_IMG.jpg"; break;
+            case 4: path = "/com/seproject/img/YUT_IMG.jpg"; break;
+            case 5: path = "/com/seproject/img/MO_IMG.jpg"; break;
+            case -1: path = "/com/seproject/img/BACKDO_IMG.jpg"; break;
+
         }
-        YutResult.getContentPane().add(imageIcon);
-        YutResult.pack();
-        YutResult.setLocationRelativeTo(this); // 메인 프레임 기준 중앙
 
-        YutResult.setVisible(true);
+        if (path != null) {
+            ImageIcon image = new ImageIcon(getClass().getResource(path));
+            Image scaled = image.getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH);
+            imageIcon = new JLabel(new ImageIcon(scaled));
+            YutResult.getContentPane().add(imageIcon);
+            YutResult.pack();
+            YutResult.setLocationRelativeTo(this);
+            YutResult.setVisible(true);
 
-        // 2초 후 자동 닫기
-        new Timer(2000, e -> YutResult.dispose()).start();
+            new Timer(2000, e -> YutResult.dispose()).start();
+        }
     }
+
 }
