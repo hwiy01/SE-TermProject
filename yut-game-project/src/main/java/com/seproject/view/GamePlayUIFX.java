@@ -367,12 +367,12 @@ public class GamePlayUIFX {
     // ---------------- 윷 결과 이미지 ---------------- //
     private void yutResultImage(int result) {
         String path = switch (result) {
-            case  1 -> "/img/DO_IMG.jpg";
-            case  2 -> "/img/GAE_IMG.jpg";
-            case  3 -> "/img/GEOL_IMG.jpg";
-            case  4 -> "/img/YUT_IMG.jpg";
-            case  5 -> "/img/MO_IMG.jpg";
-            case -1 -> "/img/BACKDO_IMG.jpg";
+            case  1 -> "/com/seproject/img/DO_IMG.jpg";
+            case  2 -> "/com/seproject/img/GAE_IMG.jpg";
+            case  3 -> "/com/seproject/img/GEOL_IMG.jpg";
+            case  4 -> "/com/seproject/img/YUT_IMG.jpg";
+            case  5 -> "/com/seproject/img/MO_IMG.jpg";
+            case -1 -> "/com/seproject/img/BACKDO_IMG.jpg";
             default -> null;
         };
         if (path == null) return;

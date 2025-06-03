@@ -367,16 +367,12 @@ public class GamePlayUI extends JFrame {
         String path = null;
 
         switch(result){
-
-            
-
             case 1: path = "/com/seproject/img/DO_IMG.jpg"; break;
             case 2: path = "/com/seproject/img/GAE_IMG.jpg"; break;
             case 3: path = "/com/seproject/img/GEOL_IMG.jpg"; break;
             case 4: path = "/com/seproject/img/YUT_IMG.jpg"; break;
             case 5: path = "/com/seproject/img/MO_IMG.jpg"; break;
             case -1: path = "/com/seproject/img/BACKDO_IMG.jpg"; break;
-
         }
 
         if (path != null) {
