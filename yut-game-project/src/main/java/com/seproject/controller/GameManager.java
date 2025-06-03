@@ -6,6 +6,7 @@ import com.seproject.model.Dice;
 import com.seproject.model.Piece;
 import com.seproject.model.Player;
 import com.seproject.view.GamePlayUI;
+import com.seproject.view.GamePlayUIFX;
 
 import java.util.ArrayList;
 
